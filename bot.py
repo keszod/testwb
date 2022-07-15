@@ -195,5 +195,5 @@ async def answer(message):
 		start_parse(str(chat_id))
 
 if __name__ == '__main__':
-	#Thread(target=start_loop,args=[]).start()
+	Thread(target=start_loop,args=[]).start()
 	executor.start_polling(dp,skip_updates=True)
