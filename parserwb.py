@@ -15,15 +15,15 @@ regions = {
 }
 
 
-def get_products(chat_id):
-	with open(f'products/products {chat_id}.json','r',encoding='utf-8-sig') as file:
+def get_products(chat_id,name=''):
+	with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
 		products = json.loads(file.read())
 
 	return products
 
-def save_products(products,chat_id):
+def save_products(products,chat_id,name=''):
 	print('saving')
-	with open(f'products/products {chat_id}.json','w',encoding='utf-8-sig') as file:
+	with open(f'products/products{name} {chat_id}.json','w',encoding='utf-8-sig') as file:
 		file.write(json.dumps(products))
 
 def start_loop():
@@ -36,18 +36,20 @@ def start_loop():
 	while  True:
 		sended_message = False
 		while True:
+			users = db.get_users()
+			for user in users:
+				if os.path.exists('products/products_competive '+user[0]+'.json'):
+					check_competitor(user[0])
 			hour,minute = datetime.now().strftime("%H:%M").split(':')
 			print(hour,'hour')
 			if hour == '10' and not sended_message:
-				users = db.get_users()
-
 				for user in users:		
 					start_parse(user[0])
 				sended_message = True
 			if hour == '11':
 				break
 			
-			sleep(20)
+			sleep(3)
 
 def check_if_product_selling(id_,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
@@ -59,10 +61,64 @@ def check_if_product_selling(id_,exctra):
 
 	return False
 
+
+def check_competitor_products(ids,exctra):
+	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+';'.join(ids)
+	print(search_url)
+	data = get_page(search_url)
+
+	return data['data']['products']
+
+def check_competitor(chat_id):
+	products = get_products(chat_id,'_competive')
+
+	for region in regions:
+		text = region+':\n\n'
+		count = 0
+
+		update_products = check_competitor_products(products.keys(),regions[region])
+		
+		for product in update_products:
+			product_ = products[str(product['id'])]
+			price = str(product['salePriceU']//100)
+			name = product_['name']
+			
+			if not 'wh' in product:
+				price = None
+
+			if product_['price'][region] != price:
+				if not product_['price'][region] is None:
+					if not price is None:
+						change = int(price) - int(product_['price'][region])
+						print(change)
+						if change > 0:
+							symbol = '+'
+							emoji = '🟢'
+						else:
+							symbol = ''
+							emoji = '🔴'
+				else:
+					symbol = ''
+					emoji = '🟢'
+					change = 'Снова в продаже'
+
+				count += 1
+				if price:
+					text += str(count)+'. '+f'Цена на товар {name} изменилась {price} ({symbol}{change}){emoji}'+'\n'
+				else:
+					text += str(count)+'. '+f'Товар {name}, больше не в продаже🔴'
+				product_['price'][region] = price
+
+		if text == region+':\n\n':
+			continue
+		
+		save_products(products,chat_id,'_competive')
+		send_message(text,chat_id)
+
 #@dp.message_handler()
 def start_parse(chat_id):
 	products = get_products(chat_id)
-	send_message(chat_id,'Отчёт готовится,ожидайте')
+	send_message('Отчёт готовится,ожидайте',chat_id,)
 	
 	for product in products:
 		name = product['name'].split('/')[0]
@@ -137,6 +193,7 @@ def send_message(message,chat_id):
 	chat_id = chat_id
 	message = urllib.parse.quote_plus(message)
 	url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+message+'&parse_mode=html'
+	print(url)
 	requests.get(url)
 
 def get_page(url):
@@ -232,4 +289,4 @@ if __name__ == '__main__':
 	#start_loop()
 	#send_message('~Товар~','618939593')
 	#print(get_name('43475901'))
-	print(check_if_product_selling('11127342'))
+	check_competitor('618939593')

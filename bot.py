@@ -18,19 +18,22 @@ db_path = os.path.join(BASE_DIR, "db.db")
 
 db = SQLighter(db_path)
 
-start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Добавить товар')).add(KeyboardButton('Редактировать'))
+start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Добавить товар')).add(KeyboardButton('Редактировать')).add(KeyboardButton('Товары конкурентов'))
 edit_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Главное меню'))
+
+edit_keyboard_comp = ReplyKeyboardMarkup().add(KeyboardButton('Добавить товар')).add(KeyboardButton('Главное меню'))
+
 edit_search_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить новый')).add(KeyboardButton('Главное меню'))
 
-def get_products(chat_id):
-	with open(f'products/products {chat_id}.json','r',encoding='utf-8-sig') as file:
+def get_products(chat_id,name=''):
+	with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
 		products = json.loads(file.read())
 
 	return products
 
-def save_products(products,chat_id):
+def save_products(products,chat_id,name=''):
 	print('saving')
-	with open(f'products/products {chat_id}.json','w',encoding='utf-8-sig') as file:
+	with open(f'products/products{name} {chat_id}.json','w',encoding='utf-8-sig') as file:
 		file.write(json.dumps(products))
 
 @dp.message_handler()
@@ -49,6 +52,7 @@ async def answer(message):
 	answer = ''
 	save = False
 	parse = False
+	save_name = ''
 
 	if text == 'Главное меню' or text == '/start':
 		if status != 'main':
@@ -77,7 +81,85 @@ async def answer(message):
 			else:
 				answer = f'Товары отсуствуют'
 				keyboard = start_buttons
+		elif text == 'Товары конкурентов':
+			db.update_status(chat_id,'competitor_choose')
+			answer = 'У вас нет товаров конкурентов'
+			keyboard = edit_keyboard_comp
+			print('products/products_competive '+str(chat_id))
+			if os.path.exists('products/products_competive '+str(chat_id)+'.json'):
+				products = get_products(chat_id,'_competive')
 				
+				if products != {}:
+					answer = 'Выберите товар для удаления:\n\n'
+					count = 1
+					for product in products:
+						answer += str(count)+'. '+products[product]['name']+'\n'
+						count += 1
+
+	
+	elif 'competitor' in status:
+		if 'choose' in status:
+			if text == 'Добавить товар':
+				db.update_status(chat_id,'competitor_add_name')
+				answer = 'Введите название товара'
+			elif text.isnumeric() and os.path.exists('products/products_competive '+str(chat_id)+'.json'):
+				products = get_products(chat_id,'_competive')
+				db.update_status(chat_id,'main')
+				keyboard = start_buttons
+
+				if not int(text)-1 >= len(products):
+					count = 0
+					for product in products:
+						if count == int(text)-1:
+							name = products[product]['name']
+							del products[product]
+							break
+						count += 1
+					answer = f'Товар {name} успешно удалён'
+					save = True
+					save_name = '_competive'
+
+				else:
+					answer = 'Такой товар отсуствует'
+			else:
+				db.update_status(chat_id,'main')
+				answer = 'Невозможный выбор'
+				keyboard = start_buttons
+
+		if 'add' in status:
+			if 'name' in status:
+				db.update_status(chat_id,'competitor_add_url')
+				db.update_temp(chat_id,text)
+				answer = 'Введите ссылку на товар'
+			elif 'url' in status:
+				db.update_status(chat_id,'main')
+				answer = 'Товар успешно добавлен'
+				keyboard = start_buttons
+				try:
+					id_ = text.split('/')[4].split('/')[0]
+				except:
+					id_ = ''
+					db.update_status(chat_id,'main')
+					answer = 'Неправильный url'
+					keyboard = start_buttons
+
+				if not id_ == '':
+					temp = db.get_temp(chat_id)
+
+					if os.path.exists('products/products_competive '+str(chat_id)+'.json'):
+						products = get_products(chat_id,'_competive')
+					else:
+						products = {}
+
+					price = {}
+					for region in regions:
+						price[region] = '0'
+					
+					products[id_] = {'name':temp,'price':price}
+					save = True
+					save_name = '_competive'
+
+
 	elif 'add_product' in status:
 		if 'url' in status:
 			try:
@@ -186,7 +268,7 @@ async def answer(message):
 				else:
 					answer = 'Такой номер отсуствует'
 	if save:
-		save_products(products,chat_id)
+		save_products(products,chat_id,save_name)
 
 	if answer != '':
 		await message.answer(answer,reply_markup=keyboard)
