@@ -4,6 +4,7 @@ import json
 import traceback
 import urllib.parse
 import os
+import copy
 from sql import SQLighter
 from datetime import datetime, timedelta
 from aiogram import Bot, Dispatcher, executor, types
@@ -36,10 +37,14 @@ def start_loop():
 	while  True:
 		sended_message = False
 		while True:
-			users = db.get_users()
-			for user in users:
-				if os.path.exists('products/products_competive '+user[0]+'.json'):
-					check_competitor(user[0])
+			try:
+				users = db.get_users()
+				for user in users:
+					if os.path.exists('products/products_competive '+user[0]+'.json'):
+						check_competitor(user[0])
+			except:
+				traceback.print_exc()
+
 			hour,minute = datetime.now().strftime("%H:%M").split(':')
 			print(hour,'hour')
 			if hour == '10' and not sended_message:
@@ -51,7 +56,7 @@ def start_loop():
 			
 			sleep(3)
 
-def check_if_product_selling(id_,exctra):
+def check_if_product_in_fileselling(id_,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
 	print(search_url)
 	data = get_page(search_url)['data']['products'][0]
@@ -71,49 +76,49 @@ def check_competitor_products(ids,exctra):
 
 def check_competitor(chat_id):
 	products = get_products(chat_id,'_competive')
-
-	for region in regions:
-		text = region+':\n\n'
-		count = 0
-
-		update_products = check_competitor_products(products.keys(),regions[region])
+	old_products = copy.deepcopy(products)
+	update_products = check_competitor_products(products.keys(),regions['Москва'])
+	text = ''
+	count = 0
+	for product in update_products:
+		product_in_file = products[str(product['id'])]
+		price = str(product['salePriceU']//100)
+		name = product_in_file['name']
+		region = 'Москва'
 		
-		for product in update_products:
-			product_ = products[str(product['id'])]
-			price = str(product['salePriceU']//100)
-			name = product_['name']
-			
-			if not 'wh' in product:
-				price = None
+		if not 'wh' in product:
+			price = None
 
-			if product_['price'][region] != price:
-				if not product_['price'][region] is None:
-					if not price is None:
-						change = int(price) - int(product_['price'][region])
-						print(change)
-						if change > 0:
-							symbol = '+'
-							emoji = '🟢'
-						else:
-							symbol = ''
-							emoji = '🔴'
-				else:
-					symbol = ''
-					emoji = '🟢'
-					change = 'Снова в продаже'
+		if product_in_file['price'][region] != price:
+			if not product_in_file['price'][region] is None:
+				if not price is None:
+					change = int(price) - int(product_in_file['price'][region])
+					print(change)
+					if change > 0:
+						symbol = '+'
+						emoji = '🟢'
+					else:
+						symbol = ''
+						emoji = '🔴'
+			else:
+				symbol = ''
+				emoji = '🟢'
+				change = 'Снова в продаже'
 
-				count += 1
+			count += 1
+			print('pric is ',price)
+			if product_in_file['price'][region] != '0':
 				if price:
-					text += str(count)+'. '+f'Цена на товар {name} изменилась {price} ({symbol}{change}){emoji}'+'\n'
+					text += str(count)+'. '+f'Цена на товар {name} изменилась: {price} ({symbol}{change}){emoji}'+'\n'
 				else:
 					text += str(count)+'. '+f'Товар {name}, больше не в продаже🔴'
-				product_['price'][region] = price
-
-		if text == region+':\n\n':
-			continue
+			
+			product_in_file['price'][region] = price
 		
-		save_products(products,chat_id,'_competive')
-		send_message(text,chat_id)
+
+		if not products == old_products:
+			send_message(text,chat_id)
+			save_products(products,chat_id,'_competive')
 
 #@dp.message_handler()
 def start_parse(chat_id):
@@ -137,7 +142,7 @@ def start_parse(chat_id):
 			
 			product['search'] = search
 
-			if check_if_product_selling(id_,regions[region]):
+			if check_if_product_in_fileselling(id_,regions[region]):
 				count = 0		
 				for search in product['search']:
 					count += 1
