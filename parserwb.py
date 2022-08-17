@@ -206,7 +206,7 @@ def get_page(url):
 	r = requests.get(url,headers=headers)
 	test(r.text,'test.html')
 	json_ = json.loads(r.text)
-	sleep(1)
+	sleep(0)
 	
 	return json_
 
@@ -294,4 +294,8 @@ if __name__ == '__main__':
 	#start_loop()
 	#send_message('~Товар~','618939593')
 	#print(get_name('43475901'))
-	check_competitor('618939593')
+        while True:
+            try:
+                start_parse("340549861")
+            except:
+                sleep(5)
