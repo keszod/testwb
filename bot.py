@@ -27,18 +27,96 @@ start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Добави
 edit_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Главное меню'))
 edit_search_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить новый')).add(KeyboardButton('Главное меню'))
 
-def get_products(chat_id,name=''):
-	with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+admin_chats = ['340549861','618939593']
+
+
+def get_products(chat_id='',name=''):
+	print('name is ',name)
+	if not 'products' in name:
+		name = f'products{name} {chat_id}.json'
+	
+	with open(f'products/{name}','r',encoding='utf-8-sig') as file:
 		products = json.loads(file.read())
 
 	return products
+
+def users_string(amount):
+	if amount > 9:
+		amount %= 10
+	
+	if amount == 1:
+		return 'пользователь'
+	elif amount < 5:
+		return 'пользователя'
+	else:
+		return 'пользователей'
+
+def human_string(amount):
+	if amount > 9:
+		amount %= 10
+	
+	if amount > 1 and amount < 5:
+		return 'человека'
+	else:
+		return 'человек'
+
+def get_info():
+	amount_of_users = len(db.get_users())
+	users = []
+	users_search = 0
+	users_products = 0
+	searches = []
+	products = []
+
+	for filename in os.listdir("products"):
+		with open(os.path.join("products", filename), 'r') as f:
+			data = f.read()
+			if data == '[]' or data == '{}':
+				continue	
+
+			data = get_products(name=filename)
+			
+			if not filename in users:
+				users.append(filename)
+
+			print(filename)
+			if not '_competive' in filename:
+				print(data)
+				for product in data:
+					print(product)
+					for search in product['search']:
+						if not search in searches:
+							searches.append(search)
+
+				users_search += 1
+			else:
+				for product in data:
+					if not product in products:
+						products.append(product)
+				users_products += 1
+
+	info = f'1. В боте зарегистрировано {amount_of_users} '+users_string(amount_of_users)+'\n2. Активных пользователей - '+str(len(users))+'\n3. '+str(users_search) + ' ' + human_string(users_search)+' имеют(ет) запросы на отслеживании'+'\n4. '+str(users_products) + ' ' + human_string(users_products)+' имеют(ет) товары на отслеживании'+'\n5. '+'Всего поисковых запросов '+str(len(searches))+'\n6. '+str(len(products))+' товаров отслеживается'
+
+	return info
 
 def save_products(products,chat_id,name=''):
 	print('saving')
 	with open(f'products/products{name} {chat_id}.json','w',encoding='utf-8-sig') as file:
 		file.write(json.dumps(products))
 
-@dp.message_handler()
+async def post(message):
+	users = db.get_users()
+
+	for user in users:
+		user = user[0]
+		if not os.path.exists('photo.png'):
+			await bot.send_message(chat_id=user,text=message)
+		else:
+			with open('photo.png', 'rb') as photo:
+				await bot.send_photo(chat_id=user,caption=message,photo=photo)
+			
+
+@dp.message_handler(content_types=['text','document','photo'])
 async def answer(message):
 	start_message = 'Выберите действие'
 	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1.Отслеживать движения товаров в поисковой выдаче WildBerries в разных городах. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n\n2.Следить за действиями ваших главных конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия"
@@ -53,21 +131,61 @@ async def answer(message):
 	text = message.text
 	keyboard = ReplyKeyboardMarkup().add('Главное меню')
 	answer = ''
+	
 	save = False
 	parse = False
-	save_name = ''
 
+	save_name = ''
+	admin_rights = False
+
+	if str(chat_id) in admin_chats:
+		admin_rights = True
+		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('/info')).add(KeyboardButton('/post'))
+	
 	if text == 'Главное меню':
 		if status != 'main':
 			start_message = 'Выбор отменён,выберите действие'
 		db.update_status(chat_id,'start')
 		await message.answer(start_message,reply_markup=start_buttons)
 		return
+
 	elif text == '/start':
 		db.update_status(chat_id,'first')
 		await message.answer(first_message,reply_markup=first_button)
 		return
+
+	if admin_rights:
+		if message.text == '/info':
+			info = get_info()
+			await message.answer(info,reply_markup=start_buttons)
+			return
+
+		elif message.text == '/post':
+			db.update_status(chat_id,'post')
+			await message.answer('Введите сообщение для рассылки',reply_markup=keyboard)
+			return
 	
+	if 'post' in status:
+		if not 'start' in status:
+			db.update_status(chat_id,'post start')
+	
+			if message.photo != []:
+				await message.photo[-1].download('photo.png')
+				text = message.caption
+			else:
+				os.remove('photo.png')
+			
+			db.update_temp(chat_id,text)
+			keyboard = ReplyKeyboardMarkup().add('Да').add('Главное меню')
+			await message.answer('Вы уверены,что хотите сделать рассыку этого сообщения?',reply_markup=keyboard)
+		else:
+			if text == 'Да':
+				print('post')
+				text = db.get_temp(chat_id)
+				await post(text)
+				await message.answer(start_message,reply_markup=start_buttons)
+		return
+
 	products = get_products(chat_id)
 
 	if status == 'first':
