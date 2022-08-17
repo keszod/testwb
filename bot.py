@@ -172,7 +172,7 @@ async def answer(message):
 			if message.photo != []:
 				await message.photo[-1].download('photo.png')
 				text = message.caption
-			else:
+			elif os.path.exists('photo.png'):
 				os.remove('photo.png')
 			
 			db.update_temp(chat_id,text)
