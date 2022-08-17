@@ -76,8 +76,8 @@ def get_info():
 
 			data = get_products(name=filename)
 			
-			if not filename in users:
-				users.append(filename)
+			if not filename.split()[1] in users:
+				users.append(filename.split()[1])
 
 			print(filename)
 			if not '_competive' in filename:
