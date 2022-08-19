@@ -69,13 +69,12 @@ def get_info():
 	products = []
 
 	for filename in os.listdir("products"):
-		with open(os.path.join("products", filename), 'r') as f:
-			data = f.read()
-			if data == '[]' or data == '{}':
-				continue	
-
+		with open(os.path.join("products", filename), 'r',encoding='utf-8-sig') as f:
 			data = get_products(name=filename)
 			
+			if data == [] or data == {}:
+				continue
+
 			if not filename.split()[1] in users:
 				users.append(filename.split()[1])
 
@@ -120,12 +119,15 @@ async def post(message):
 async def answer(message):
 	start_message = 'Выберите действие'
 	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1.Отслеживать движения товаров в поисковой выдаче WildBerries в разных городах. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n\n2.Следить за действиями ваших главных конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия"
+	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов'))
 	chat_id = message.chat.id
 	
 	if not db.user_exists(str(chat_id)):
 		db.add_user(str(chat_id))
+		db.update_status(chat_id,'first')
 		save_products([],chat_id)
 		await message.answer(first_message,reply_markup=first_button)
+		return
 	
 	status = db.get_status(chat_id)
 	text = message.text
@@ -206,6 +208,7 @@ async def answer(message):
 		if 'main' in status:
 			if text == 'Получить отчёт':
 				answer = ''
+				db.update_status(chat_id,'start')
 				keyboard = ReplyKeyboardMarkup()
 				parse = True
 			elif text == 'Добавить товар':

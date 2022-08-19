@@ -194,10 +194,15 @@ def start_parse(chat_id):
 
 
 def send_message(message,chat_id):
+	admin_chats = ['340549861','618939593']
 	telegram_api = 'https://api.telegram.org/bot5490688808:AAE9EVs8TSxndZt7FDAo7JyjwVIftI6DkH4/'
 	chat_id = chat_id
 	message = urllib.parse.quote_plus(message)
-	url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+message+'&parse_mode=html'
+
+	keyboard = [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['/info'],['/post']]
+	keyboard = {'keyboard':keyboard,'resize_keyboard':False}
+	
+	url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+message+'&parse_mode=html&reply_markup='+json.dumps(keyboard)
 	print(url)
 	requests.get(url)
 
