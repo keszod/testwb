@@ -207,7 +207,7 @@ def start_loop():
 
 			hour,minute = datetime.now().strftime("%H:%M").split(':')
 			print(hour,'hour')
-			if hour == '23' and not sended_message:
+			if hour == '10' and not sended_message:
 				for user in users:		
 					days_max,days_past = user[-2:]
 				
