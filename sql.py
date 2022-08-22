@@ -23,9 +23,13 @@ class SQLighter:
 		return result[0][0]
 	
 	def get_users(self):
-		users = self.execute("SELECT `chat_id` FROM `user_condition`").fetchall()
+		users = self.execute("SELECT * FROM `user_condition`").fetchall()
 		
 		return users 
+
+	def update_user(self,days_max,days_past,chat_id):
+		with self.connection:
+			return self.execute("UPDATE `user_condition` SET `days_max` = ?,`days_past` = ? WHERE `chat_id` = ?",(days_max,days_past,chat_id,))
 	
 	def add_user(self,chat_id):
 		"""Добавляем пользователя в базу"""
