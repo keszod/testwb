@@ -359,9 +359,9 @@ def start_parse(chat_id):
 
 def get_answer_message(market,url,name,data,region):
 	if market == 'wb':
-		number = check_position(name,url,regions[region])
+		number = str(check_position(name,url,regions[region]))
 	elif market == 'ozon':
-		number = check_product_ozon(url,region=region)
+		number = str(check_product_ozon(url,region=region))
 
 	print('number is',number,'data is',data)
 	if number is None:
