@@ -256,11 +256,15 @@ async def answer_message(message,text=''):
 			db.update_status(chat_id,'competitor_main')
 
 	elif status == 'period':
-		periods = [1,3,7,31,-1]
+		periods = [1,3,7,31]
 		days_past = 0
-		days_max = periods[int(text)-1]
-		db.update_user(days_max,days_past,chat_id)
-		answer = 'Периодичность выставлена'
+
+		if not text.isnumeric() or int(text) > len(periods):
+			answer = 'Не возможный вариант'
+		else:
+			days_max = periods[int(text)-1]
+			db.update_user(days_max,days_past,chat_id)
+			answer = 'Периодичность выставлена'
 		db.update_status(chat_id,'start')
 		keyboard = start_buttons
 	
@@ -279,7 +283,7 @@ async def answer_message(message,text=''):
 				keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Ozon')).add(KeyboardButton('WildBerries')).add(KeyboardButton('Главное меню'))
 				db.update_status(chat_id,'change_market')
 			elif text == 'Периодичность отчёта':
-				answer = 'Выберите как часто хотите,чтобы приходил отчёт:\n\n1.Каждый день\n2.Каждые три дня\n3.Каждую неделю\n4.Каждый месяц\n5.Никогда'
+				answer = 'Выберите, как часто бот должен присылать отчёт об изменении позиций ваших товаров: :\n\n1.Каждый день\n2.Каждые три дня\n3.Каждую неделю\n4.Каждый месяц\n\nПришлите номер нужного варианта'
 				db.update_status(chat_id,'period')
 
 	if 'add_product' in status:
@@ -309,7 +313,7 @@ async def answer_message(message,text=''):
 			if 'wildberries' in temp:
 				db.update_temp(chat_id,temp+','+text)
 				db.update_status(chat_id,'goods_add_product_search')
-				answer = 'Введите запросы по который данный товар будет отслеживаться,через запятую'
+				answer = 'Введите запросы по которым данный товар будет отслеживаться,через запятую'
 			elif 'ozon' in temp:
 				save_name = '_ozon'
 				products = get_products(chat_id,save_name)
@@ -491,7 +495,7 @@ async def answer_message(message,text=''):
 						answer += '\nВведите номер товара, который хотите удалить'
 		
 		elif 'delete' in status:
-			if text.isnumeric() and os.path.exists('products/products_competive '+str(chat_id)+'.json'):
+			if text.isnumeric() and os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
 				products = get_products(chat_id,'_wb_competive')
 				db.update_status(chat_id,'start')
 				keyboard = start_buttons
