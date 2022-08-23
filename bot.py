@@ -313,7 +313,7 @@ async def answer_message(message,text=''):
 			if 'wildberries' in temp:
 				db.update_temp(chat_id,temp+','+text)
 				db.update_status(chat_id,'goods_add_product_search')
-				answer = 'Введите запросы по которым данный товар будет отслеживаться,через запятую'
+				answer = 'Введите запросы по которым данный товар будет отслеживаться , через запятую'
 			elif 'ozon' in temp:
 				save_name = '_ozon'
 				products = get_products(chat_id,save_name)
