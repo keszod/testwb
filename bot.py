@@ -478,8 +478,8 @@ async def answer_message(message,text=''):
 			elif text == 'Список отслеживаемых товаров и их удаление':
 				db.update_status(chat_id,'competitor_delete')
 				answer = 'У вас нет товаров конкурентов'
-				print('products/products_competive '+str(chat_id))
-				if os.path.exists('products/products_competive '+str(chat_id)+'.json'):
+				print('products/products_wb_competive '+str(chat_id))
+				if os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
 					products = get_products(chat_id,'_wb_competive')
 					
 					if products != {}:
@@ -537,7 +537,7 @@ async def answer_message(message,text=''):
 				keyboard = start_buttons
 				id_ = db.get_temp(chat_id)
 
-				if os.path.exists('products/products_competive '+str(chat_id)+'.json'):
+				if os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
 					products = get_products(chat_id,'_wb_competive')
 				else:
 					products = {}
