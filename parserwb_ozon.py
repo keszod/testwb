@@ -82,9 +82,9 @@ def get_page_driver(url,region):
 		try:
 			print(url)
 			driver.get(url)
-			sleep(0.2)
+			sleep(0.1)
 			load_cookie(region)
-			sleep(1)
+			sleep(0.4)
 
 			data = driver.find_element(By.XPATH,"/html/body").text
 			#test(data,'test.html')
@@ -126,15 +126,23 @@ def check_product_ozon(id_,last_page=26,region='',extra_params=''):
 		search_param = category+'?page='+str(page) if page == 1 else next_page_str.replace('layout_container=searchMegapagination&','')
 		
 		json_ = get_page_driver(search_url+search_param,region)
-		 
+		widget = json_['widgetStates']
+		
 		if page == 1:
-			searchresult = 'searchResultsV2-252189-default-'
-			next_page_param = json.loads(json_['widgetStates']['megaPaginator-252190-default-'+str(page)])
+			for key in widget:
+				if 'searchResultsV2' in key and 'default-' in key:
+					searchresult = key
+			
+				elif 'megaPaginator-' in key and 'default-' in key:
+					next_page_param = json.loads(json_['widgetStates'][key])
 		else:
-			searchresult = 'searchResultsV2-193750-categorySearchMegapagination-'
+			for key in widget:
+				if 'searchResultsV2' in key and 'categorySearchMegapagination-' in key:
+					searchresult = key
+					break
 			next_page_param = json_
 
-		widget = json.loads(json_['widgetStates'][searchresult+str(page)])
+		widget = json.loads(json_['widgetStates'][searchresult])
 		
 		if not 'items' in widget or len(widget['items']) == 0:
 			return None
@@ -143,7 +151,6 @@ def check_product_ozon(id_,last_page=26,region='',extra_params=''):
 		
 		for item in items:
 			item_id = item['action']['link'].split('/?')[0].split('-')[-1]
-			print(item_id)
 			if not 'backgroundColor' in item:
 				number += 1
 				result = number
@@ -232,7 +239,6 @@ def start_loop():
 
 def check_if_product_in_fileselling(id_,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
-	print(search_url)
 	data = get_page(search_url)['data']['products'][0]
 
 	if 'wh' in data:
@@ -243,7 +249,6 @@ def check_if_product_in_fileselling(id_,exctra):
 
 def check_competitor_products(ids,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+';'.join(ids)
-	print(search_url)
 	data = get_page(search_url)
 
 	return data['data']['products']
@@ -269,7 +274,6 @@ def check_competitor(chat_id):
 			if not product_in_file['price'][region] is None:
 				if not price is None:
 					change = int(price) - int(product_in_file['price'][region])
-					print(change)
 					if change > 0:
 						symbol = '+'
 						emoji = '🟢'
@@ -282,7 +286,6 @@ def check_competitor(chat_id):
 				change = 'Снова в продаже'
 
 			count += 1
-			print('pric is ',price)
 			if product_in_file['price'][region] != '0':
 				if price:
 					text += str(count)+'. '+f'Цена на товар {name} изменилась: {price} ({symbol}{change}){emoji}'+'\n'
@@ -311,6 +314,7 @@ def start_parse(chat_id):
 			warining_sent = True
 		
 		for product in products:
+			print(product)
 			name = product['name']
 			url = product['url']
 			if market == 'wb':
@@ -354,20 +358,20 @@ def start_parse(chat_id):
 				else:
 					text += f'-Нет в наличии\n\n'
 		
-		send_message(text,chat_id)
+			send_message(text,chat_id)
+	
 	send_message(f'Отчёт по позициям товаров за {now} закончен',chat_id)
 
 def get_answer_message(market,url,name,data,region):
 	if market == 'wb':
-		number = str(check_position(name,url,regions[region]))
+		number = check_position(name,url,regions[region])
 	elif market == 'ozon':
-		number = str(check_product_ozon(url,region=region))
+		number = check_product_ozon(url,region=region)
 
-	print('number is',number,'data is',data)
 	if number is None:
 		answer_message = name+' - товар в выдаче, на 25+ странице🔴'
-	elif 'реклама' in number:
-		num = number.split()[1]
+	elif 'реклама' in str(number):
+		num = str(number).split()[1]
 		if data[region] is None or not 'реклама' in data[region]:
 			answer_message = name+' - Товар рекламируется©,место '+num+' 🟢'
 		else:
@@ -375,20 +379,20 @@ def get_answer_message(market,url,name,data,region):
 			end = '🟢' if int(diff) >= 0 else '🔴'
 			diff = '+'+diff if int(diff) >= 0 else diff
 
-			answer_message = name+' - Товар рекламируется©,место '+number+'('+diff+') '+end
+			answer_message = name+' - Товар рекламируется©,место '+str(number)+'('+diff+') '+end
 
-	elif 'нет' in number:
+	elif 'нет' in str(number):
 		answer_message = '<del>'+name+'</del>'+' - товар отсутствует в выдаче 🔴'
 
 	else:
 		if not data[region] or not data[region].isnumeric():
-			answer_message = name+' - место '+number+' 🟢'
+			answer_message = name+' - место '+str(number)+' 🟢'
 		else:
 			diff = str(int(data[region])-int(number))
 			end = '🟢' if int(diff) >= 0 else '🔴'
 			diff = '+'+diff if int(diff) >= 0 else diff
 
-			answer_message = name+' - место '+number+'('+diff+') '+end
+			answer_message = name+' - место '+str(number)+'('+diff+') '+end
 
 	data[region] = number
 
@@ -434,7 +438,6 @@ def get_headers():
 
 def check_adv(query,id_):
 	search_url = f'https://catalog-ads.wildberries.ru/api/v5/search?keyword={query}'
-	print(search_url)
 	data = get_page(search_url)['adverts']
 	number = 1
 	if data is None:
@@ -448,7 +451,6 @@ def check_adv(query,id_):
 	return None
 
 def get_name(id_):
-	print(id_)
 	search_url = f'https://wbx-content-v2.wbstatic.net/ru/{id_}.json'
 	result = get_page(search_url)
 	return result
