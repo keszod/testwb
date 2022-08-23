@@ -210,12 +210,12 @@ async def answer_message(message,text=''):
 		return
 
 	if admin_rights:
-		if message.text == '/info':
+		if message.text == '/info' and admin_rights:
 			info = get_info()
 			await message.answer(info,reply_markup=start_buttons)
 			return
 
-		elif message.text == '/post':
+		elif message.text == '/post' and admin_rights:
 			db.update_status(chat_id,'post')
 			await message.answer('Введите сообщение для рассылки',reply_markup=keyboard)
 			return
