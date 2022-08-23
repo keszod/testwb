@@ -394,7 +394,7 @@ def get_answer_message(market,url,name,data,region):
 
 			answer_message = name+' - место '+str(number)+'('+diff+') '+end
 
-	data[region] = number
+	data[region] = str(number)
 
 	return answer_message
 
