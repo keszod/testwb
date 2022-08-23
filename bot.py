@@ -315,7 +315,7 @@ async def answer_message(message,text=''):
 				products = get_products(chat_id,save_name)
 				name = text
 				db.update_status(chat_id,'start')
-				answer = f'Товар `{name}` добавлен,ожидайте отчёт'
+				answer = f'Товар "{name}" добавлен'
 				product = {'url':temp,'name':name,'place':{'москва':None,'казань':None}}
 				products.append(product)
 				keyboard = start_buttons
@@ -339,7 +339,7 @@ async def answer_message(message,text=''):
 
 			products.append(product)
 			save = True
-			answer = f'Товар `{name}` добавлен,ожидайте отчёт'
+			answer = f'Товар "{name}" добавлен'
 			keyboard = start_buttons
 	
 	elif 'change' in status:

@@ -305,6 +305,8 @@ def check_competitor(chat_id):
 def start_parse(chat_id):
 	warining_sent = False
 	market_places = ['wb','ozon']
+	full_name_market = {'wb':'WildBerries','ozon':'Ozon'}
+	
 	for market in market_places:
 		products = get_products(chat_id,'_'+market)
 		
@@ -319,7 +321,9 @@ def start_parse(chat_id):
 			url = product['url']
 			if market == 'wb':
 				id_ = int(url.split('/')[4].split('/')[0])
-			text = f'<b>{market} -> {name}</b>:\n\n'
+			
+			full_name = full_name_market[market]
+			text = f'<b>{full_name} -> {name}</b>:\n\n'
 
 			for region in regions:
 				text += region+':\n\n'
