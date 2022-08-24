@@ -3,6 +3,7 @@ from sql import SQLighter
 import requests
 import json
 import os
+import copy
 from threading import Thread
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardRemove,ReplyKeyboardMarkup, KeyboardButton
@@ -458,7 +459,7 @@ async def answer_message(message,text=''):
 				else:
 					db.update_status(chat_id,'wb_goods_change_product')
 					keyboard = start_buttons
-					old_products = products[:]
+					old_products = copy.deepcopy(products)
 
 					for num in text.split(','):
 						num = num.strip()
@@ -467,10 +468,10 @@ async def answer_message(message,text=''):
 
 							if len(name) > 15:
 								name = name[:15]+'...'
-							
-							search = products[int(temp)-1]['search'][int(num)-1][0]
-							answer_mess = f'Запрос {search} для товара {name} - удалён'
+
 							index = products[int(temp)-1]['search'].index(old_products[int(temp)-1]['search'][int(num)-1])
+							search = products[int(temp)-1]['search'][index][0]
+							answer_mess = f'Запрос {search} для товара {name} - удалён'
 							
 							del products[int(temp)-1]['search'][index]
 							save = True
@@ -479,7 +480,7 @@ async def answer_message(message,text=''):
 
 						await message.answer(answer_mess)
 
-					answer = ' '
+					answer = 'Выберите действие'
 					twice_answer = True
 					twice_answer_text = 'Редактировать поисковые запросы'
 
@@ -503,7 +504,7 @@ async def answer_message(message,text=''):
 
 					await message.answer(answer_mess)
 				
-				answer = ' '
+				answer = 'Выберите действие'
 				twice_answer = True
 				twice_answer_text = 'Ozon'
 	
