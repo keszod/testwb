@@ -114,7 +114,10 @@ def get_category(id_):
 def check_product_ozon(id_,last_page=26,region='',extra_params=''):
 	number = 0
 	add_number = 0
-	id_ = id_.split('/?')[0].split('-')[-1]
+	if '/?' in text:
+		id_ = id_.split('/?')[0].split('-')[-1]
+	else:
+		id_ = id_.split('/')[-2].split('-')[-1]
 
 	category = get_category(id_)
 	
@@ -288,17 +291,16 @@ def check_competitor(chat_id):
 			count += 1
 			if product_in_file['price'][region] != '0':
 				if price:
-					text += str(count)+'. '+f'Цена на товар {name} изменилась: {price} ({symbol}{change}){emoji}'+'\n'
-					keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(product['id']),'text':'https://www.wildberries.ru/catalog/'+str(product['id'])})
+					text = f'Цена на товар {name} изменилась: {price} ({symbol}{change}){emoji}'+'\n'
+					keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(product['id'])+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
 				else:
-					text += str(count)+'. '+f'Товар {name}, больше не в продаже🔴'
+					text = f'Товар {name}, больше не в продаже🔴'
 			
 			product_in_file['price'][region] = price
-		
+			keyboard = {'inline_keyboard':[keyboard]}
+			send_message(text,chat_id,keyboard=keyboard)
 
 	if products != old_products:
-		keyboard = {'inline_keyboard':[keyboard]}
-		send_message(text,chat_id,keyboard=keyboard)
 		save_products(products,chat_id,'_wb_competive')
 
 #@dp.message_handler()

@@ -248,7 +248,7 @@ async def answer_message(message,text=''):
 	elif status == 'start':
 		if text == 'Отчёт о позициях товаров':
 			keyboard = start_buttons_goods
-			answer = 'После того как вы добавили товар, бот ежедневно будет отчитываться о том как меняются его позиции\n\n\nЕжедневный отчёт приходит после 10:00 по Мск\n\n\nТакже вы можете запросить формирование отчёта в любой момент, если нужны свежие данные о его позициях'
+			answer = 'После того как вы добавили товар, бот будет регулярно отчитываться о том как меняются его позиции\n\nОтчёт приходит после 10:00 по Мск с заданной периодичностью\n\nВы можете в любой момент изменить периодичность отчётов или запросить немедленное формирование отчёта'
 			db.update_status(chat_id,'goods_main')
 		elif text == 'Отчёт по действиям конкурентов':
 			keyboard = start_buttons_copetitor
@@ -290,7 +290,10 @@ async def answer_message(message,text=''):
 		if 'url' in status:
 			try:
 				if 'ozon' in text:
-					id_ = text.split('/?')[0].split('-')[-1]
+					if '/?' in text:
+						id_ = text.split('/?')[0].split('-')[-1]
+					else:
+						id_ = text.split('/')[-2].split('-')[-1]
 				elif 'wildberries' in text:	
 					id_ = text.split('/')[4].split('/')[0]
 				else:
@@ -311,7 +314,7 @@ async def answer_message(message,text=''):
 		elif 'name' in status:
 			temp = db.get_temp(chat_id)
 			if 'wildberries' in temp:
-				db.update_temp(chat_id,temp+','+text)
+				db.update_temp(chat_id,temp+';;;;;'+text)
 				db.update_status(chat_id,'goods_add_product_search')
 				answer = 'Введите запросы по которым данный товар будет отслеживаться , через запятую'
 			elif 'ozon' in temp:
@@ -326,9 +329,15 @@ async def answer_message(message,text=''):
 			
 				save = True
 
+				if len(products) == 1:
+					print('here')
+					twice_answer = True
+					twice_answer_text = 'Периодичность отчёта'
+					db.update_status(chat_id,'goods_main')
+
 		elif 'search' in status:
 			db.update_status(chat_id,'start')
-			url,name = db.get_temp(chat_id).split(',')
+			url,name = db.get_temp(chat_id).split(';;;;;')
 			id_ = int(url.split('/')[4].split('/')[0])
 			
 			product = {'url':url,'name':name,'search':[]}
@@ -345,25 +354,31 @@ async def answer_message(message,text=''):
 			save = True
 			answer = f'Товар "{name}" добавлен'
 			keyboard = start_buttons
+
+			if len(products) == 1:
+				print('here')
+				twice_answer = True
+				twice_answer_text = 'Периодичность отчёта'
+				db.update_status(chat_id,'goods_main')
 	
 	elif 'change' in status:
 		if 'market' in status:
 			if text in markets:
 				if text == 'WildBerries':
-					need_to = 'отредактировать'
+					need_to = 'Отправьте порядоквые номер товара,который нужно отредактировать'
 					new_status = 'change_wb_goods_change_choose'
 				elif text == 'Ozon':
 					save_name = '_ozon'
 					products = get_products(chat_id,save_name)
 					
-					need_to = 'удалить'
+					need_to = 'Отправьте порядоквые номера товаров,которые нужно удалить, через запятую'
 					new_status = 'change_ozon_delete_choose'
 				
 				if len(products) > 0:
 					list_text = ''
 					for i in range(len(products)):
 						list_text += str(i+1)+') '+products[i]['name']+'\n\n' 
-					answer = f'Список товаров на отслеживание: \n\n{list_text}\n\n Отправьте порядоквый номер товара,который нужно '+need_to
+					answer = f'Список товаров на отслеживание: \n\n{list_text}\n\n '+need_to
 					db.update_status(chat_id,new_status)
 				else:
 					answer = f'Товары отсуствуют'
@@ -401,7 +416,7 @@ async def answer_message(message,text=''):
 					for i in range(len(search)):
 						search_list += str(i+1)+') '+search[i][0]+'\n'
 					
-					answer = f'Список запросов по которым отслеживается `{name}`:\n\n {search_list} \nОтправте порядковый номер запроса который нужно удалить'
+					answer = f'Список запросов по которым отслеживается `{name}`:\n\n {search_list} \nОтправте порядковые номера запросов которые нужно удалить через запятую'
 					keyboard = edit_search_keyboard
 				elif text == 'Удалить товар':
 					db.update_status(chat_id,'change_market')
@@ -443,36 +458,54 @@ async def answer_message(message,text=''):
 				else:
 					db.update_status(chat_id,'wb_goods_change_product')
 					keyboard = start_buttons
-					
-					if text.isnumeric():
-						name = products[int(temp)-1]['name']
+					old_products = products[:]
 
-						if len(name) > 15:
-							name = name[:15]+'...'
-						
-						search = products[int(temp)-1]['search'][int(text)-1][0]
-						answer = f'Запрос {search} для товара {name} - удалён'
-						del products[int(temp)-1]['search'][int(text)-1]
-						save = True
-						twice_answer = True
-						twice_answer_text = 'Редактировать поисковые запросы'
-					else:
-						answer = 'Такой номер отсуствует'
+					for num in text.split(','):
+						num = num.strip()
+						if num.isnumeric() and not int(num)-1 >= len(old_products[int(temp)-1]['search']):
+							name = products[int(temp)-1]['name']
+
+							if len(name) > 15:
+								name = name[:15]+'...'
+							
+							search = products[int(temp)-1]['search'][int(num)-1][0]
+							answer_mess = f'Запрос {search} для товара {name} - удалён'
+							index = products[int(temp)-1]['search'].index(old_products[int(temp)-1]['search'][int(num)-1])
+							
+							del products[int(temp)-1]['search'][index]
+							save = True
+						else:
+							answer_mess = f'{num} такой номер отсуствует'
+
+						await message.answer(answer_mess)
+
+					answer = ' '
+					twice_answer = True
+					twice_answer_text = 'Редактировать поисковые запросы'
 
 		elif 'ozon' in status:
 			save_name = '_ozon'
 			products = get_products(chat_id,save_name)
-			
+			old_products = products[:]
 			if 'delete' in status:
-				keyboard = start_buttons
-				db.update_status(chat_id,'change_market')
+				for num in text.split(','):
+					num = num.strip()
+					keyboard = start_buttons
+					db.update_status(chat_id,'change_market')
+					
+					if num.isnumeric() and int(num) <= len(old_products):
+						index = products.index(old_products[int(num)-1])
+						del products[index]
+						answer_mess = f'Товар {num} удалён'
+						save = True
+					else:
+						answer_mess = f'{num} невозможный выбор'
+
+					await message.answer(answer_mess)
 				
-				if text.isnumeric() and int(text) <= len(products):
-					del products[int(text)-1]
-					answer = f'Товар {text} удалён'
-					save = True
-					twice_answer = True
-					twice_answer_text = 'Ozon'
+				answer = ' '
+				twice_answer = True
+				twice_answer_text = 'Ozon'
 	
 	elif 'competitor' in status:
 		if 'main' in status:
@@ -495,29 +528,36 @@ async def answer_message(message,text=''):
 						answer += '\nВведите номер товара, который хотите удалить'
 		
 		elif 'delete' in status:
-			if text.isnumeric() and os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
-				products = get_products(chat_id,'_wb_competive')
+			if os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
+				products = get_products(chat_id,'_wb_competive')				
+				old_products = list(products.keys())
 				db.update_status(chat_id,'start')
 				keyboard = start_buttons
+		
+				for num in text.split(','):
+					num = num.strip()
+					if num.isnumeric():
+						if not int(num)-1 >= len(old_products):
+							count = 0
+							for product in old_products:
+								print(count)
+								if count == int(num)-1:
+									name = products[product]['name']
+									del products[product]
+									break
+								count += 1
+							answer_mess = f'Товар {name} успешно удалён и более не отслеживается'
+							save = True
+							save_name = '_wb_competive'
 
-				if not int(text)-1 >= len(products):
-					count = 0
-					for product in products:
-						if count == int(text)-1:
-							name = products[product]['name']
-							del products[product]
-							break
-						count += 1
-					answer = f'Товар {name} успешно удалён и более не отслеживается'
-					save = True
-					save_name = '_wb_competive'
+						else:
+							answer_mess = 'Такой товар отсуствует'
+					else:
+						db.update_status(chat_id,'start')
+						answer_mess = 'Невозможный выбор'
+						keyboard = start_buttons
 
-				else:
-					answer = 'Такой товар отсуствует'
-			else:
-				db.update_status(chat_id,'start')
-				answer = 'Невозможный выбор'
-				keyboard = start_buttons
+					await message.answer(answer_mess)
 
 		elif 'add' in status:
 			if 'url' in status:
