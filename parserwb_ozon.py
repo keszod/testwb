@@ -85,9 +85,7 @@ def get_page_driver(url,region):
 			sleep(0.1)
 			load_cookie(region)
 			sleep(0.4)
-
 			data = driver.find_element(By.XPATH,"/html/body").text
-			#test(data,'test.html')
 			driver.delete_all_cookies()
 			
 			return json.loads(data)
@@ -98,6 +96,9 @@ def get_page_driver(url,region):
 def get_category(id_):
 	search_url = 'https://www.ozon.ru/product/'+str(id_)
 	driver.get(search_url)
+	sleep(3)
+	test(driver.page_source,'ozon_test.html')
+	print('saved')
 	driver.find_elements(By.XPATH,'//ol')[-1]
 	soup = bs(driver.page_source,'html.parser')
 
@@ -114,7 +115,7 @@ def get_category(id_):
 def check_product_ozon(id_,last_page=26,region='',extra_params=''):
 	number = 0
 	add_number = 0
-	if '/?' in text:
+	if '/?' in id_:
 		id_ = id_.split('/?')[0].split('-')[-1]
 	else:
 		id_ = id_.split('/')[-2].split('-')[-1]
@@ -262,9 +263,9 @@ def check_competitor(chat_id):
 	update_products = check_competitor_products(products.keys(),regions['Москва'])
 	text = ''
 	count = 0
-	keyboard = []
 
 	for product in update_products:
+		keyboard = []
 		product_in_file = products[str(product['id'])]
 		price = str(product['salePriceU']//100)
 		name = product_in_file['name']
@@ -422,7 +423,7 @@ def send_message(message,chat_id,keyboard=None):
 def get_page(url):
 	headers = get_headers()
 	r = requests.get(url,headers=headers)
-	test(r.text,'test.html')
+	#test(r.text,'test.html')
 	json_ = json.loads(r.text)
 	
 	return json_

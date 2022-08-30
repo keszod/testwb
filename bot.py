@@ -23,7 +23,7 @@ db = SQLighter(db_path)
 first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Начать'))
 
 start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов'))
-start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Добавить товар')).add(KeyboardButton('Редактировать')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
+start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
 start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Добавить товар на отслеживание')).add(KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
 
 edit_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
