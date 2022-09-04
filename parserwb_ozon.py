@@ -17,9 +17,20 @@ from datetime import datetime, timedelta
 from aiogram import Bot, Dispatcher, executor, types
 from time import sleep
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, "db.db")
+
+db = SQLighter(db_path)
+
 regions = {
 			'Москва':'&couponsGeo=12,3,18,15,21&curr=rub&dest=-1029256,-102269,-162903,-446078&emp=0&lang=ru&locale=ru&reg=0&regions=68,64,83,4,38,80,33,70,82,86,75,30,69,22,66,31,40,1,48,71&',
-			'Казань':'&regions=68,64,83,4,38,80,33,70,82,86,30,69,22,66,31,40,1,48&reg=0&emp=0&locale=ru&lang=ru&curr=rub&couponsGeo=12,7,3,6,18,22,21&dest=-1075831,-79374,-367666,-2133466&'
+			'Казань':'&regions=68,64,83,4,38,80,33,70,82,86,30,69,22,66,31,40,1,48&reg=0&emp=0&locale=ru&lang=ru&curr=rub&couponsGeo=12,7,3,6,18,22,21&dest=-1075831,-79374,-367666,-2133466&',
+			'Краснодар':'&couponsGeo=2,7,3,6,19,21,8&curr=rub&dest=-1059500,-108082,-269701,12358060&emp=0&lang=ru&locale=ru&regions=68,64,83,4,38,80,33,70,82,86,30,69,22,66,31,40,1,48&',
+			'Санкт-Петербург':'&couponsGeo=12,7,3,6,5,18,21&curr=rub&dest=-1216601,-337422,-1114252,-1124719&emp=0&lang=ru&locale=ru&regions=68,64,83,4,38,80,33,70,82,86,30,69,22,66,31,40,1,48&',
+			'Екатеринбург':'&couponsGeo=2,12,7,3,6,13,21&curr=rub&dest=-1113276,-79379,-1104258,-5818948&emp=0&lang=ru&locale=ru&regions=64,58,83,4,38,80,33,70,82,86,30,69,22,66,31,40,1,48&',
+			'Новосибирск':'&couponsGeo=2,12,7,3,6,21,16&curr=rub&dest=-1221148,-140294,-1751445,-364763&emp=0&lang=ru&locale=ru&regions=64,58,83,4,38,80,33,70,82,86,30,69,22,66,31,40,1,48&',
+			'Хабаровск':'&couponsGeo=2,12,7,6,9,21,11&curr=rub&dest=-1221185,-151223,-1782064,-1785056&emp=0&lang=ru&locale=ru&regions=64,4,38,80,70,82,86,30,69,22,66,40,1,48&'
 }
 
 def create_driver(headless=True):
@@ -199,10 +210,6 @@ def save_products(products,chat_id,name=''):
 
 def start_loop():
 	print('Петля запущена')
-	BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-	db_path = os.path.join(BASE_DIR, "db.db")
-
-	db = SQLighter(db_path)
 	
 	while  True:
 		sended_message = False
@@ -258,6 +265,15 @@ def check_competitor_products(ids,exctra):
 	return data['data']['products']
 
 def check_competitor(chat_id):
+	shared = db.get_shared(chat_id)
+	extra_chat_ids = []
+	
+	if shared and shared != '':
+		if 'shared' in shared:
+			return
+		else:
+			extra_chat_ids = shared.split()
+	
 	products = get_products(chat_id,'_wb_competive')
 	old_products = copy.deepcopy(products)
 	update_products = check_competitor_products(products.keys(),regions['Москва'])
@@ -299,23 +315,41 @@ def check_competitor(chat_id):
 			
 			product_in_file['price'][region] = price
 			keyboard = {'inline_keyboard':[keyboard]}
-			send_message(text,chat_id,keyboard=keyboard)
+			send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
 
 	if products != old_products:
 		save_products(products,chat_id,'_wb_competive')
 
 #@dp.message_handler()
-def start_parse(chat_id):
+def start_parse(chat_id,solo=False):
 	warining_sent = False
-	market_places = ['wb','ozon']
+	market_places = ['wb']
 	full_name_market = {'wb':'WildBerries','ozon':'Ozon'}
-	
+	now = datetime.now().strftime("%d.%m")
+	blank = 0
+	products_chat_id = chat_id
+	extra_chat_ids = []
+	shared = db.get_shared(chat_id)
+
+	if shared and shared != '':
+		if 'shared' in shared:
+			if not solo:
+				return
+			else:
+				products_chat_id = shared.split('_')[1]
+		elif not solo:
+			extra_chat_ids= shared.split()
+
 	for market in market_places:
-		products = get_products(chat_id,'_'+market)
+		products = get_products(products_chat_id,'_'+market)
+		if len(products) == 0:
+			blank += 1
+			if blank == len(products) - 1:
+				send_message(f'Товары не добавлены, для формирования отчёта добавьте товары',chat_id)
+			continue
 		
 		if not warining_sent and not products == []:
-			now = datetime.now().strftime("%d.%m")
-			send_message(f'Отчёт по позициям товаров за {now} готовится, ожидайте',chat_id)
+			send_message(f'Отчёт по позициям товаров за {now} готовится, ожидайте',chat_id,extra_chat_ids=extra_chat_ids)
 			warining_sent = True
 		
 		for product in products:
@@ -333,12 +367,8 @@ def start_parse(chat_id):
 				if market == 'wb':
 					search = []
 					for reg_search in product['search']:
-						if reg_search[1] is None or not 'Москва' in reg_search[1]:
-							search.append([reg_search[0],{'Москва':reg_search[1],'Казань':None}])
-						else:
-							search.append(reg_search)
-					
-					product['search'] = search
+						if not region in reg_search[1]:
+							reg_search[1][region] = None
 
 				if market == 'ozon' or check_if_product_in_fileselling(id_,regions[region]):
 					count = 0
@@ -349,7 +379,7 @@ def start_parse(chat_id):
 								name_search = search[0].strip()
 								print(name_search)
 								answer_message = get_answer_message(market,url,name_search,search[1],region)
-								save_products(products,chat_id,'_wb')
+								save_products(products,products_chat_id,'_wb')
 							except:
 								traceback.print_exc()
 								answer_message = name_search+' - произошла ошибка⚠️'
@@ -359,15 +389,15 @@ def start_parse(chat_id):
 					elif market == 'ozon':
 						count += 1
 						answer_message = get_answer_message(market,url,product['name'],product['place'],region.lower())
-						save_products(products,chat_id,'_ozon')
+						save_products(products,products_chat_id,'_ozon')
 						text += str(count)+'. '+answer_message+'\n'
 					text += '\n'
 				else:
 					text += f'-Нет в наличии\n\n'
 		
-			send_message(text,chat_id)
+			send_message(text,chat_id,extra_chat_ids=extra_chat_ids)
 	
-	send_message(f'Отчёт по позициям товаров за {now} закончен',chat_id)
+	send_message(f'Отчёт по позициям товаров за {now} закончен',chat_id,extra_chat_ids=extra_chat_ids)
 
 def get_answer_message(market,url,name,data,region):
 	if market == 'wb':
@@ -406,19 +436,22 @@ def get_answer_message(market,url,name,data,region):
 	return answer_message
 
 
-def send_message(message,chat_id,keyboard=None):
-	admin_chats = ['340549861','618939593']
-	telegram_api = 'https://api.telegram.org/bot5490688808:AAE9EVs8TSxndZt7FDAo7JyjwVIftI6DkH4/'
-	chat_id = chat_id
-	message = urllib.parse.quote_plus(message)
-	
-	if not keyboard:
-		keyboard = [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['/info'],['/post']]
-		keyboard = {'keyboard':keyboard,'resize_keyboard':False}
-	
-	url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+message+'&parse_mode=html&reply_markup='+json.dumps(keyboard)
-	print(url)
-	requests.get(url)
+def send_message(message,chat_id,keyboard=None,extra_chat_ids=[]):
+	extra_chat_ids = [chat_id]+extra_chat_ids
+
+	for chat_id in extra_chat_ids:
+		admin_chats = ['340549861','618939593']
+		telegram_api = 'https://api.telegram.org/bot5490688808:AAE9EVs8TSxndZt7FDAo7JyjwVIftI6DkH4/'
+		chat_id = chat_id
+		text = urllib.parse.quote_plus(message)
+		
+		if not keyboard:
+			keyboard = [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['Аккаунт компании']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['Аккаунт компании'],['/info'],['/post']]
+			keyboard = {'keyboard':keyboard,'resize_keyboard':False}
+		
+		url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+text+'&parse_mode=html&reply_markup='+json.dumps(keyboard)
+		print(url)
+		requests.get(url)
 
 def get_page(url):
 	headers = get_headers()

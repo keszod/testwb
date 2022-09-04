@@ -21,8 +21,8 @@ db_path = os.path.join(BASE_DIR, "db.db")
 db = SQLighter(db_path)
 
 first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Начать'))
-
-start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов'))
+shared_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
+start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании'))
 start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
 start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Добавить товар на отслеживание')).add(KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
 
@@ -150,20 +150,34 @@ async def post(message):
 			
 
 @dp.message_handler(content_types=['text','document','photo'])
-async def answer_message(message,text=''):
+async def answer_message(message,text='',chat_id=''):
 	start_message = 'Выберите действие'
 	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1.Отслеживать движения товаров в поисковой выдаче WildBerries в разных городах. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n\n2.Следить за действиями ваших главных конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия"
-	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов'))
-	chat_id = message.chat.id
+	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании'))
+	
+	if chat_id == '':
+		chat_id = message.chat.id 
+		twice_chat_id = ''
+	else:
+		twice_chat_id = chat_id
+
 	markets = ['Ozon','WildBerries']
 	files = ['_wb','_wb_competive','_ozon']
+	chat_id_products = chat_id
+
+	if db.get_shared(chat_id) and 'shared' in db.get_shared(chat_id):
+		chat_id_products =  db.get_shared(chat_id).split('_')[1]
 
 	twice_answer = False
 	twice_answer_text = ''
 
 
 	if not db.user_exists(str(chat_id)):
-		db.add_user(str(chat_id))
+		if message.from_user.username:
+			db.add_user(str(chat_id),message.from_user.username)
+		else:
+			db.add_user(str(chat_id),message.from_user.first_name)
+
 		db.update_status(chat_id,'first')
 		
 		for file in files:
@@ -179,6 +193,14 @@ async def answer_message(message,text=''):
 			if not os.path.exists('products/products'+file+' '+str(chat_id)+'.json'):
 				blank = [] if not 'competive' in file else {}
 				save_products(blank,chat_id,file)
+
+		if twice_chat_id == '':
+			if message.from_user.username:
+				if db.get_nick(chat_id) != message.from_user.username:
+					db.add_nick_name(chat_id,message.from_user.username)
+			else:
+				if db.get_nick(chat_id) != message.from_user.first_name:
+					db.add_nick_name(chat_id,message.from_user.first_name)
 	
 	status = db.get_status(chat_id)
 	if text == '':
@@ -190,13 +212,13 @@ async def answer_message(message,text=''):
 	parse = False
 
 	save_name = '_wb'
-	products = get_products(chat_id,save_name)
+	products = get_products(chat_id_products,save_name)
 
 	admin_rights = False
 
 	if str(chat_id) in admin_chats:
 		admin_rights = True
-		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('/info')).add(KeyboardButton('/post'))
+		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('/info')).add(KeyboardButton('/post'))
 	
 	if text == 'Главное меню':
 		if status != 'main':
@@ -255,6 +277,10 @@ async def answer_message(message,text=''):
 			keyboard = start_buttons_copetitor
 			answer = 'Бот предупредит вас когда конкурент сменит цену или его товар выпадет из наличия\n\n\nЭто важно, если ваш товар находится на первых местах в топе. Тогда действия конкурентов будут влиять на ваши продажи, а благодаря боту вы будете в курсе и быстро узнаете если ваш конкурент начнёт демпинговать или наоборот завысит цену, и сможете изменить свою цену, привлечь таким образом больше покупателей и продаж\n\n\nЭто же касается и моментов когда важный конкурент выпадает из наличия, в это время выгодно поднимать цены, ведь вам достанется больше покупателей\n\n\nТакже данный функционал можно использовать для отслеживания собственных цен. Чтобы убедиться в том что установлена правильная цена (помогает контролировать сотрудников и проверять себя), а также убедиться в том что скидка применилась и товар добавился в акцию'
 			db.update_status(chat_id,'competitor_main')
+		elif text == 'Аккаунт компании':
+			keyboard = shared_keyboard
+			answer = 'Выберите действие'
+			db.update_status(chat_id,'shared_main')
 
 	elif status == 'period':
 		periods = [1,3,7,31]
@@ -268,8 +294,91 @@ async def answer_message(message,text=''):
 			answer = 'Периодичность выставлена'
 		db.update_status(chat_id,'start')
 		keyboard = start_buttons
-	
-	if 'goods' in status:
+
+	if 'shared' in status:
+		if 'main' in status:
+			shared = db.get_shared(chat_id)
+
+			if text == 'Добавить пользователя':
+				if not shared or shared == '':
+					answer = 'Введите username пользователя,которого хотите добавить'
+					db.update_status(chat_id,'shared_add')
+				else:
+					answer = 'У вас уже есть аккаунт компании'
+					db.update_status(chat_id,'start')
+
+			elif text == 'Удалить пользователя':
+				if shared and shared != '':
+					if not 'shared' in shared:
+						shared = shared.split()
+						
+						answer = 'Выберите пользователя,которго хотите удалить:\n\n'
+					
+						for i in range(len(shared)):
+							answer += str(i+1)+'. '+db.get_nick(shared[i])+'\n'
+
+						db.update_status(chat_id,'shared_delete')
+					else:
+						orgin_chat_id = shared.split('_')[1]
+						db.add_shared(chat_id,'')
+						shared_origin = db.get_shared(orgin_chat_id).split()
+						print(shared_origin)
+						db.update_status(orgin_chat_id,'shared_delete')
+						twice_answer_text = str(shared_origin.index(str(chat_id))+1)
+						twice_answer = True
+						twice_chat_id = orgin_chat_id
+						answer = 'Вы вышли из аккаунта компании'
+						keyboard = start_buttons
+						db.update_status(chat_id,'start')
+
+				else:
+					answer = 'У вас нет добавленых пользователей'
+					db.update_status(chat_id,'start')
+
+		elif 'add' in status:
+			shared_chat_id = db.get_chat_from_nick(text)
+			keyboard = start_buttons
+			db.update_status(chat_id,'start')
+			
+			if shared_chat_id == []:
+				answer = 'Этот пользователь не зарегистрирован или не активен'
+			else:
+				shared_chat_id = shared_chat_id[0]
+				shared_origin = db.get_shared(chat_id)
+
+				if not db.get_shared(shared_chat_id) or db.get_shared(shared_chat_id) == '':
+					if not shared_origin:
+						shared_origin = ''
+					else:
+						shared_origin += ' '
+
+					shared_origin += str(shared_chat_id)
+					shared_sec = 'shared_'+str(chat_id)
+
+					db.add_shared(chat_id,shared_origin)
+					db.add_shared(shared_chat_id,shared_sec)
+
+					answer = f'Акканут {text} добавлен'
+
+				else:
+					answer = 'У этого пользователя уже есть аккаунт компании'
+
+		elif 'delete' in status:
+			keyboard = start_buttons
+			db.update_status(chat_id,'start')	
+			shared_origin = db.get_shared(chat_id)
+			shared_origin = shared_origin.split()
+
+			if text.isnumeric() and int(text)-1 < len(shared_origin):
+				nick = db.get_nick(shared_origin[int(text)-1])
+				del shared_origin[int(text)-1]
+				db.add_shared(chat_id,' '.join(shared_origin).strip())
+				answer = f'Аккаунт {nick} удалён'
+			else:
+				answer = 'Невозможный выбор'
+
+
+	elif 'goods' in status:
 		if 'main' in status:
 			if text == 'Получить отчёт':
 				answer = ''
@@ -320,7 +429,7 @@ async def answer_message(message,text=''):
 				answer = 'Введите запросы по которым данный товар будет отслеживаться , через запятую'
 			elif 'ozon' in temp:
 				save_name = '_ozon'
-				products = get_products(chat_id,save_name)
+				products = get_products(chat_id_products,save_name)
 				name = text
 				db.update_status(chat_id,'start')
 				answer = f'Товар "{name}" добавлен'
@@ -370,7 +479,7 @@ async def answer_message(message,text=''):
 					new_status = 'change_wb_goods_change_choose'
 				elif text == 'Ozon':
 					save_name = '_ozon'
-					products = get_products(chat_id,save_name)
+					products = get_products(chat_id_products,save_name)
 					
 					need_to = 'Отправьте порядоквые номера товаров,которые нужно удалить, через запятую'
 					new_status = 'change_ozon_delete_choose'
@@ -486,7 +595,7 @@ async def answer_message(message,text=''):
 
 		elif 'ozon' in status:
 			save_name = '_ozon'
-			products = get_products(chat_id,save_name)
+			products = get_products(chat_id_products,save_name)
 			old_products = products[:]
 			if 'delete' in status:
 				for num in text.split(','):
@@ -518,7 +627,7 @@ async def answer_message(message,text=''):
 				answer = 'У вас нет товаров конкурентов'
 				print('products/products_wb_competive '+str(chat_id))
 				if os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
-					products = get_products(chat_id,'_wb_competive')
+					products = get_products(chat_id_products,'_wb_competive')
 					
 					if products != {}:
 						answer = ''
@@ -530,7 +639,7 @@ async def answer_message(message,text=''):
 		
 		elif 'delete' in status:
 			if os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
-				products = get_products(chat_id,'_wb_competive')				
+				products = get_products(chat_id_products,'_wb_competive')				
 				old_products = list(products.keys())
 				db.update_status(chat_id,'start')
 				keyboard = start_buttons
@@ -583,7 +692,7 @@ async def answer_message(message,text=''):
 				id_ = db.get_temp(chat_id)
 
 				if os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
-					products = get_products(chat_id,'_wb_competive')
+					products = get_products(chat_id_products,'_wb_competive')
 				else:
 					products = {}
 
@@ -597,16 +706,16 @@ async def answer_message(message,text=''):
 	
 
 	if save:
-		save_products(products,chat_id,save_name)
+		save_products(products,chat_id_products,save_name)
 
 	if answer != '':
 		await message.answer(answer,reply_markup=keyboard)
 	
 	if twice_answer:
-		await answer_message(message,twice_answer_text)
+		await answer_message(message,twice_answer_text,twice_chat_id)
 
 	if parse:
-		start_parse(str(chat_id))
+		start_parse(str(chat_id),True)
 
 
 if __name__ == '__main__':
