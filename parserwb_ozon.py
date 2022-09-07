@@ -330,6 +330,7 @@ def start_parse(chat_id,solo=False):
 	products_chat_id = chat_id
 	extra_chat_ids = []
 	shared = db.get_shared(chat_id)
+	messages = []
 
 	if shared and shared != '':
 		if 'shared' in shared:
@@ -339,6 +340,8 @@ def start_parse(chat_id,solo=False):
 				products_chat_id = shared.split('_')[1]
 		elif not solo:
 			extra_chat_ids= shared.split()
+
+	user_regions = db.get_user(products_chat_id)[6].split(',')
 
 	for market in market_places:
 		products = get_products(products_chat_id,'_'+market)
@@ -363,6 +366,9 @@ def start_parse(chat_id,solo=False):
 			text = f'<b>{full_name} -> {name}</b>:\n\n'
 
 			for region in regions:
+				if not region in user_regions:
+					continue
+
 				text += region+':\n\n'
 				if market == 'wb':
 					search = []
@@ -395,7 +401,18 @@ def start_parse(chat_id,solo=False):
 				else:
 					text += f'-Нет в наличии\n\n'
 		
-			send_message(text,chat_id,extra_chat_ids=extra_chat_ids)
+			messages.append(text)
+
+	j = 0
+	do_while = True
+	while j != len(messages)-1 or do_while:
+	 	do_while = False
+	 	for i in range(len(messages)-1,-1,-1):
+	 		if len(''.join(messages[j:i+1])) <= 4000:
+	 			text = ''.join(messages[j:i+1])
+	 			send_message(text,chat_id,extra_chat_ids=extra_chat_ids)
+	 			j = i
+	 			break
 	
 	send_message(f'Отчёт по позициям товаров за {now} закончен',chat_id,extra_chat_ids=extra_chat_ids)
 
@@ -446,7 +463,7 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[]):
 		text = urllib.parse.quote_plus(message)
 		
 		if not keyboard:
-			keyboard = [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['Аккаунт компании']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['Аккаунт компании'],['/info'],['/post']]
+			keyboard = [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['Аккаунт компании'],['Настройки']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['Аккаунт компании'],['Настройки'],['/info'],['/post']]
 			keyboard = {'keyboard':keyboard,'resize_keyboard':False}
 		
 		url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+text+'&parse_mode=html&reply_markup='+json.dumps(keyboard)

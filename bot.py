@@ -153,7 +153,7 @@ async def post(message):
 async def answer_message(message,text='',chat_id=''):
 	start_message = 'Выберите действие'
 	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1.Отслеживать движения товаров в поисковой выдаче WildBerries в разных городах. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n\n2.Следить за действиями ваших главных конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия"
-	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании'))
+	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки'))
 	
 	if chat_id == '':
 		chat_id = message.chat.id 
@@ -218,7 +218,7 @@ async def answer_message(message,text='',chat_id=''):
 
 	if str(chat_id) in admin_chats:
 		admin_rights = True
-		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('/info')).add(KeyboardButton('/post'))
+		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки')).add(KeyboardButton('/info')).add(KeyboardButton('/post'))
 	
 	if text == 'Главное меню':
 		if status != 'main':
@@ -281,6 +281,10 @@ async def answer_message(message,text='',chat_id=''):
 			keyboard = shared_keyboard
 			answer = 'Выберите действие'
 			db.update_status(chat_id,'shared_main')
+		elif text == 'Настройки':
+			keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Доавить регион/регионы')).add(KeyboardButton('Удалить регион/регионы')).add(KeyboardButton('Главное меню'))
+			answer = 'Выберите действие'
+			db.update_status(chat_id,'settings choose')
 
 	elif status == 'period':
 		periods = [1,3,7,31]
@@ -376,6 +380,67 @@ async def answer_message(message,text='',chat_id=''):
 				answer = f'Аккаунт {nick} удалён'
 			else:
 				answer = 'Невозможный выбор'
+
+	elif 'settings' in status:
+		if 'choose' in status:
+			user_regions = db.get_user(chat_id)[6].split(',')
+			if text == 'Доавить регион/регионы':
+				answer = "Введите регионы которые хотите добавить через запятую: \n\n"
+				new_regions = []
+				for region in regions:
+					if not region in user_regions:
+						new_regions.append(region)
+
+				answer += ','.join(new_regions)
+				
+				db.update_status(chat_id,'settings region add')
+			elif text == 'Удалить регион/регионы':
+				answer = "Введите регионы которые хотите удалить через запятую: \n\n"
+				answer += ','.join(user_regions)
+				db.update_status(chat_id,'settings region delete')
+
+		elif 'region' in status:
+			if 'add' in status:
+				user_regions = db.get_user(chat_id)[6].split(',')
+				choosed_regions = text.split(',')
+				answer = ''
+				
+				for choosed_region in choosed_regions:
+					for region in regions:
+						if region.lower() == choosed_region.lower() and region not in user_regions:
+							user_regions.append(region)
+							answer += choosed_region+' добавлен(а)'+'\n'
+							break
+					else:
+						answer += choosed_region+' отсуствует'+'\n'
+
+				db.update_regions(chat_id,','.join(user_regions))
+				db.update_status(chat_id,'start')
+				keyboard = start_buttons
+
+			elif 'delete' in status:
+				user_regions = db.get_user(chat_id)[6].split(',')
+				choosed_regions = text.split(',')
+				delete_regions = []
+				answer = ''
+
+				for choosed_region in choosed_regions:
+					for region in user_regions:
+						if region.lower() == choosed_region.lower():
+							delete_regions.append(region)
+							answer += choosed_region+' удалён(а)'+'\n'
+							break
+					else:
+						answer += choosed_region+' отсуствует'+'\n'
+				new_regions = []
+
+				for region in user_regions:
+					if not region in delete_regions:
+						new_regions.append(region)
+
+				db.update_regions(chat_id,','.join(new_regions))
+				db.update_status(chat_id,'start')
+				keyboard = start_buttons
 
 
 	elif 'goods' in status:

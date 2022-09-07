@@ -32,6 +32,11 @@ class SQLighter:
 		
 		return users 
 
+	def get_user(self,chat_id):
+		user = self.execute("SELECT * FROM `user_condition` WHERE `chat_id` = ?",(chat_id,)).fetchall()
+		
+		return user[0]
+
 	def update_user(self,days_max,days_past,chat_id):
 		with self.connection:
 			return self.execute("UPDATE `user_condition` SET `days_max` = ?,`days_past` = ? WHERE `chat_id` = ?",(days_max,days_past,chat_id,))
@@ -65,6 +70,11 @@ class SQLighter:
 		"""Обновляем значение"""
 		with self.connection:
 			return self.execute("UPDATE `user_condition` SET `shared` = ? WHERE `chat_id` = ?",(shared,chat_id,))
+
+	def update_regions(self,chat_id,regions):
+		"""Обновляем значение"""
+		with self.connection:
+			return self.execute("UPDATE `user_condition` SET `regions` = ? WHERE `chat_id` = ?",(regions,chat_id,))
 
 	def get_shared(self,chat_id):
 		result = self.execute("SELECT `shared` FROM `user_condition` WHERE `chat_id` = ?",(chat_id,)).fetchall()
