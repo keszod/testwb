@@ -318,9 +318,9 @@ def check_competitor(chat_id):
 				product_in_file['price'][region] = price
 				keyboard = {'inline_keyboard':[keyboard]}
 				send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
-			except:
-				traceback.print_exc()
-				continue
+		except:
+			traceback.print_exc()
+			continue
 
 	if products != old_products:
 		save_products(products,chat_id,'_wb_competive')
