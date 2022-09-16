@@ -281,41 +281,46 @@ def check_competitor(chat_id):
 	count = 0
 
 	for product in update_products:
-		keyboard = []
-		product_in_file = products[str(product['id'])]
-		price = str(product['salePriceU']//100)
-		name = product_in_file['name']
-		region = 'Москва'
-		
-		if not 'wh' in product:
-			price = None
-
-		if product_in_file['price'][region] != price:
-			if not product_in_file['price'][region] is None:
-				if not price is None:
-					change = int(price) - int(product_in_file['price'][region])
-					if change > 0:
-						symbol = '+'
-						emoji = '🟢'
-					else:
-						symbol = ''
-						emoji = '🔴'
-			else:
-				symbol = ''
-				emoji = '🟢'
-				change = 'Снова в продаже'
-
-			count += 1
-			if product_in_file['price'][region] != '0':
-				if price:
-					text = f'Цена на товар {name} изменилась: {price} ({symbol}{change}){emoji}'+'\n'
-					keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(product['id'])+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
-				else:
-					text = f'Товар {name}, больше не в продаже🔴'
+		try:
+			keyboard = []
+			product_in_file = products[str(product['id'])]
+			price = str(product['salePriceU']//100)
+			name = product_in_file['name']
+			region = 'Москва'
 			
-			product_in_file['price'][region] = price
-			keyboard = {'inline_keyboard':[keyboard]}
-			send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
+			if not 'wh' in product:
+				price = None
+
+			if product_in_file['price'][region] != price:
+				if not product_in_file['price'][region] is None:
+					if not price is None:
+						change = int(price) - int(product_in_file['price'][region])
+						if change > 0:
+							symbol = '+'
+							emoji = '🟢'
+						else:
+							symbol = ''
+							emoji = '🔴'
+				else:
+					symbol = ''
+					emoji = '🟢'
+					change = 'Снова в продаже'
+
+				count += 1
+				if product_in_file['price'][region] != '0':
+					if price:
+						text = f'Цена на товар {name} изменилась: {price} ({symbol}{change}){emoji}'+'\n'
+					else:
+						text = f'Товар {name}, больше не в продаже🔴'
+
+				keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(product['id'])+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
+				
+				product_in_file['price'][region] = price
+				keyboard = {'inline_keyboard':[keyboard]}
+				send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
+			except:
+				traceback.print_exc()
+				continue
 
 	if products != old_products:
 		save_products(products,chat_id,'_wb_competive')
@@ -380,15 +385,17 @@ def start_parse(chat_id,solo=False):
 					count = 0
 					if market == 'wb':		
 						for search in product['search']:
-							try:
-								count += 1
-								name_search = search[0].strip()
-								print(name_search)
-								answer_message = get_answer_message(market,url,name_search,search[1],region)
-								save_products(products,products_chat_id,'_wb')
-							except:
-								traceback.print_exc()
-								answer_message = name_search+' - произошла ошибка⚠️'
+							for i in range(3):
+								try:
+									count += 1
+									name_search = search[0].strip()
+									print(name_search)
+									answer_message = get_answer_message(market,url,name_search,search[1],region)
+									save_products(products,products_chat_id,'_wb')
+									break
+								except:
+									traceback.print_exc()
+									answer_message = name_search+' - произошла ошибка⚠️'
 
 							text += str(count)+'. '+answer_message+'\n'
 
