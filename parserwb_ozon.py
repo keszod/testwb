@@ -330,9 +330,7 @@ def check_competitor_shop(chat_id):
 						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
 			
 			for id_ in shops[sup_id]['products']:
-				print(id_)
 				if not id_ in ids:
-					print('ID IS ',id_)
 					product = shops[sup_id]['products'][id_]
 					name = product['name']
 					if product['price']['Москва'] != None:
