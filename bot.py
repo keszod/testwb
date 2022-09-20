@@ -179,10 +179,6 @@ async def answer_message(message,text='',chat_id=''):
 			db.add_user(str(chat_id),message.from_user.first_name)
 
 		db.update_status(chat_id,'first')
-		
-		for file in files:
-			blank = [] if not 'competive' in file or 'shop' in file else {}
-			save_products(blank,chat_id,file)
 
 		await message.answer(first_message,reply_markup=first_button)
 		return
@@ -191,7 +187,7 @@ async def answer_message(message,text='',chat_id=''):
 		for file in files:
 			print('products'+file+' '+str(chat_id)+'.json')
 			if not os.path.exists('products/products'+file+' '+str(chat_id)+'.json'):
-				blank = [] if not 'competive' in file else {}
+				blank = {} if ('competive' in file or 'shop' in file) else []
 				save_products(blank,chat_id,file)
 
 		if twice_chat_id == '':
