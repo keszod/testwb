@@ -219,6 +219,7 @@ def start_loop():
 
 				for user in users:
 					if os.path.exists('products/products_wb_competive '+user[1]+'.json'):
+						check_competitor_shop(user[1])
 						check_competitor(user[1])
 			except:
 				traceback.print_exc()
@@ -263,6 +264,87 @@ def check_competitor_products(ids,exctra):
 	data = get_page(search_url)
 
 	return data['data']['products']
+
+def check_competitor_shop(chat_id):
+	shared = db.get_shared(chat_id)
+	extra_chat_ids = []
+	
+	if shared and shared != '':
+		if 'shared' in shared:
+			return
+		else:
+			extra_chat_ids = shared.split()
+
+	if not os.path.exists(f'products/products_shop {chat_id}.json'):
+		return
+	
+	shops = get_products(chat_id,'_shop')
+	old_shops = copy.deepcopy(shops)
+	for sup_id in shops:
+		page = 1
+
+		while True:
+			search_url = 'https://catalog.wb.ru/sellers/catalog?appType=1&couponsGeo=12,3,18,15,21&curr=rub&dest=-1029256,-102269,-1252558,-1252424&emp=0&lang=ru&locale=ru&pricemarginCoeff=1.0&reg=0&regions=68,64,83,4,38,80,33,70,82,86,75,30,69,1,48,22,66,31,40,71&spp=0&supplier='+sup_id+'&page='+str(page)
+			products = get_page(search_url)['data']['products']
+			ids = []
+			
+			if len(products) == 0:
+				break
+			
+			for product in products:
+				keyboard = []
+				text = ''
+				ids.append(str(product['id']))
+
+				if not str(product['id']) in shops[sup_id]['products']:
+					text = 'Появился новый товар у '+shops[sup_id]['name']+'\n'+product['name']
+					price = {}
+					for region in regions:
+						price[region] = product['salePriceU']//100
+					
+					shops[sup_id]['products'][str(product['id'])] = {'name':product['name'],'price':price}
+				else:
+					shop_product = shops[sup_id]['products'][str(product['id'])]
+					name = shop_product['name']
+					price = product['salePriceU']//100
+
+					if shop_product['price']['Москва'] == None:
+						text = f'Товар {name} снова в продаже🟢'
+					elif product['salePriceU']//100 != shop_product['price']['Москва']:
+						change =  price - shop_product['price']['Москва']
+						
+						if change > 0:
+							symbol = '+'
+							emoji = '🟢'
+						else:
+							symbol = ''
+							emoji = '🔴'
+
+						text = f'Цена на товар {name} изменилась: {price} ({symbol}{change}){emoji}'+'\n'
+
+					shop_product['price']['Москва'] = price
+
+					keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(product['id'])+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
+					keyboard = {'inline_keyboard':[keyboard]}
+					if text != '':
+						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
+			
+			for id_ in shops[sup_id]['products']:
+				print(id_)
+				if not id_ in ids:
+					print('ID IS ',id_)
+					product = shops[sup_id]['products'][id_]
+					name = product['name']
+					if product['price']['Москва'] != None:
+						text = f'Товар {name}, больше не в продаже🔴'
+						product['price']['Москва'] = None
+						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
+			page+=1
+
+	if shops != old_shops:
+		save_products(shops,chat_id,'_shop')
+
+
 
 def check_competitor(chat_id):
 	shared = db.get_shared(chat_id)
@@ -477,10 +559,11 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[]):
 		print(url)
 		requests.get(url)
 
-def get_page(url):
-	headers = get_headers()
+def get_page(url,name='headers'):
+	headers = get_headers(name)
 	r = requests.get(url,headers=headers)
-	#test(r.text,'test.html')
+	print(url)
+	test(r.text,'test.html')
 	json_ = json.loads(r.text)
 	
 	return json_
@@ -489,8 +572,8 @@ def test(content,name):
 	with open(name,'w',encoding='utf-8') as f:
 		f.write(content)
 
-def get_headers():
-	with open('headers.txt','r',encoding='utf-8') as file:
+def get_headers(name='headers'):
+	with open(name+'.txt','r',encoding='utf-8') as file:
 		headers = file.read()
 		headers = headers.splitlines()
 		py_headers = {}
@@ -562,9 +645,48 @@ def check_position(query,url,region):
 
 	return check_product(query,id_,region=region)
 
+def add_competitor_shop(url,chat_id):
+	sup_id = url.split('/')[-1]
+	try:
+		search_url = 'https://www.wildberries.ru/webapi/seller/data/short/'+sup_id
+		name = get_page(search_url,'shop')['name']
+		user_products = get_products(chat_id,'_shop')
+
+		if sup_id in user_products:
+			return 'Такой магазин уже добавлен'
+
+		user_products[sup_id] = {'name':name,'products':{}}
+		page = 1
+
+		while True:
+			search_url = 'https://catalog.wb.ru/sellers/catalog?appType=1&couponsGeo=12,3,18,15,21&curr=rub&dest=-1029256,-102269,-1252558,-1252424&emp=0&lang=ru&locale=ru&pricemarginCoeff=1.0&reg=0&regions=68,64,83,4,38,80,33,70,82,86,75,30,69,1,48,22,66,31,40,71&spp=0&supplier='+sup_id+'&page='+str(page)
+			products = get_page(search_url)['data']['products']
+			if len(products) == 0:
+				break
+			
+			for product in products:
+				if not str(product['id']) in user_products:
+					price = {}
+					for region in regions:
+						price[region] = product['salePriceU']//100
+					
+					user_products[sup_id]['products'][str(product['id'])] = {'name':product['name'],'price':price}
+			page+=1
+		
+		if len(user_products) > 0:
+			save_products(user_products,chat_id,'_shop')
+			return f'Магазин {name} успешно добавлен'
+	except:
+		traceback.print_exc()
+
+	return 'Магазин пуст или неправильный url'
+
+
+
 if __name__ == '__main__':
 	#start_parse('618939593')
 	#start_loop()
 	#send_message('~Товар~','618939593')
 	#print(get_name('43475901'))
-	check_competitor('618939593')
+	#check_competitor('618939593')
+	add_competitor_shop('https://www.wildberries.ru/seller/70619','618939593')

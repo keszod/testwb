@@ -1,0 +1,16 @@
+accept: */*
+accept-encoding: gzip, deflate, br
+accept-language: en-US,en;q=0.9
+cache-control: no-cache
+cookie: BasketUID=d69fd412-8977-43af-a9d7-86d5be26bd6e; _wbauid=3456469161652346558; ___wbu=910023e5-2d9d-46a8-8e66-ffb5c84372fc.1652346562; _gcl_au=1.1.2073224890.1657105113; _ga=GA1.2.843456265.1657105113; __pricemargin=1.0--; _gid=GA1.2.794998103.1663682701; ___wbs=bf57a77b-8e31-47c8-b62f-849234dd67fb.1663682720; __wba_s=1; __wbl=cityId%3D0%26regionId%3D0%26city%3D%D0%B3.%20%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D0%BC%20%D0%94%D0%BC%D0%B8%D1%82%D1%80%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%A0%D1%83%D1%81%D1%82%D0%B0%D0%B2%D0%B5%D0%BB%D0%B8%2C%20%D0%B4.%203%D0%BA2%26phone%3D84957755505%26latitude%3D55%2C812485%26longitude%3D37%2C584241%26src%3D1; __store=117673_122258_122259_125238_125239_125240_6159_507_3158_117501_120602_120762_6158_121709_124731_159402_2737_130744_117986_1733_686_132043_161812_1193_206968_206348_205228_172430_117442_117866; __region=68_64_83_4_38_80_33_70_82_86_75_30_69_1_48_22_66_31_40_71; __cpns=12_3_18_15_21; __sppfix=; __dst=-1029256_-102269_-1252558_-1252424; ncache=117673_122258_122259_125238_125239_125240_6159_507_3158_117501_120602_120762_6158_121709_124731_159402_2737_130744_117986_1733_686_132043_161812_1193_206968_206348_205228_172430_117442_117866%3B68_64_83_4_38_80_33_70_82_86_75_30_69_1_48_22_66_31_40_71%3B1.0--%3B12_3_18_15_21%3B%3B-1029256_-102269_-1252558_-1252424; _dc_gtm_UA-2093267-1=1; __tm=1663696432
+pragma: no-cache
+referer: https://www.wildberries.ru/seller/70619
+sec-ch-ua: "Google Chrome";v="105", "Not)A;Brand";v="8", "Chromium";v="105"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+sec-fetch-dest: empty
+sec-fetch-mode: cors
+sec-fetch-site: same-origin
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36
+x-requested-with: XMLHttpRequest
+x-spa-version: 9.3.39

@@ -10,7 +10,7 @@ from aiogram.types import ReplyKeyboardRemove,ReplyKeyboardMarkup, KeyboardButto
 from time import sleep
 import traceback
 
-from parserwb_ozon import start_parse,start_loop,regions
+from parserwb_ozon import start_parse,start_loop,regions,add_competitor_shop
 
 bot = Bot(token='5490688808:AAE9EVs8TSxndZt7FDAo7JyjwVIftI6DkH4')
 dp = Dispatcher(bot)
@@ -24,7 +24,7 @@ first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Н�
 shared_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
 start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании'))
 start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
-start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Добавить товар на отслеживание')).add(KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
+start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Добавить товар на отслеживание')).add(KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Список отслеживаемых магазинов')).add(KeyboardButton('Главное меню'))
 
 edit_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
 edit_search_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить новый')).add(KeyboardButton('Назад'))
@@ -86,7 +86,7 @@ def get_info():
 		with open(os.path.join("products", filename), 'r',encoding='utf-8-sig') as f:
 			data = get_products(name=filename)
 			
-			if data == [] or data == {}:
+			if data == [] or data == {} or 'shop' in filename:
 				continue
 
 			if not filename.split()[1] in users:
@@ -162,7 +162,7 @@ async def answer_message(message,text='',chat_id=''):
 		twice_chat_id = chat_id
 
 	markets = ['Ozon','WildBerries']
-	files = ['_wb','_wb_competive','_ozon']
+	files = ['_wb','_wb_competive','_ozon','_shop']
 	chat_id_products = chat_id
 
 	if db.get_shared(chat_id) and 'shared' in db.get_shared(chat_id):
@@ -181,7 +181,7 @@ async def answer_message(message,text='',chat_id=''):
 		db.update_status(chat_id,'first')
 		
 		for file in files:
-			blank = [] if not 'competive' in file else {}
+			blank = [] if not 'competive' in file or 'shop' in file else {}
 			save_products(blank,chat_id,file)
 
 		await message.answer(first_message,reply_markup=first_button)
@@ -374,9 +374,11 @@ async def answer_message(message,text='',chat_id=''):
 			shared_origin = shared_origin.split()
 
 			if text.isnumeric() and int(text)-1 < len(shared_origin):
+				shared_chat_id = shared_origin[int(text)-1]
 				nick = db.get_nick(shared_origin[int(text)-1])
 				del shared_origin[int(text)-1]
 				db.add_shared(chat_id,' '.join(shared_origin).strip())
+				db.add_shared(shared_chat_id,'')
 				answer = f'Аккаунт {nick} удалён'
 			else:
 				answer = 'Невозможный выбор'
@@ -446,7 +448,7 @@ async def answer_message(message,text='',chat_id=''):
 	elif 'goods' in status:
 		if 'main' in status:
 			if text == 'Получить отчёт':
-				answer = ''
+				answer = 'Подготовка отчёта'
 				db.update_status(chat_id,'start')
 				keyboard = ReplyKeyboardMarkup()
 				parse = True
@@ -701,7 +703,47 @@ async def answer_message(message,text='',chat_id=''):
 							answer += str(count)+'. '+products[product]['name']+'\n'
 							count += 1
 						answer += '\nВведите номер товара, который хотите удалить'
+
+			elif text == 'Список отслеживаемых магазинов':
+				db.update_status(chat_id,'competitor_shop_choice')
+				answer = 'У вас нет магазинов конкурентов'
+				print('products/products_shop '+str(chat_id))
+				keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить магазин')).add(KeyboardButton('Главное меню'))
+				
+				if os.path.exists('products/products_shop '+str(chat_id)+'.json'):
+					products = get_products(chat_id_products,'_shop')
+					
+					if products != {}:
+						answer = ''
+						count = 1
+						for product in products:
+							answer += str(count)+'. '+products[product]['name']+'\n'
+							count += 1
+						answer += '\nВведите номер магазина, который хотите удалить'
 		
+		elif 'shop' in status:
+			print('here--------------------')
+			if 'choice' in status:
+				products = get_products(chat_id_products,'_shop')
+				if text == 'Добавить магазин':
+					answer = 'Введите ссылку на магазин,который хотите добавить'
+					db.update_status(chat_id,'competitor_shop_add')
+				elif text.isnumeric() and len(products) >= int(text)-1:
+					answer = 'Магазин успешно удалён'
+					products_keys = list(products.keys())
+					del products[products_keys[int(text)-1]]
+					save = True
+					save_name = '_shop'
+					twice_answer = True
+					twice_answer_text = 'Список отслеживаемых магазинов'
+					db.update_status(chat_id,'competitor_main')
+			
+			elif 'add' in status:
+				answer = add_competitor_shop(text,chat_id_products)
+				twice_answer = True
+				twice_answer_text = 'Список отслеживаемых магазинов'
+				db.update_status(chat_id,'competitor_main')
+
 		elif 'delete' in status:
 			if os.path.exists('products/products_wb_competive '+str(chat_id)+'.json'):
 				products = get_products(chat_id_products,'_wb_competive')				
@@ -768,6 +810,12 @@ async def answer_message(message,text='',chat_id=''):
 				products[id_] = {'name':text,'price':price}
 				save = True
 				save_name = '_wb_competive'
+	elif answer == '':
+		if status != 'main':
+			start_message = 'Выбор отменён,выберите действие'
+		db.update_status(chat_id,'start')
+		await message.answer(start_message,reply_markup=start_buttons)
+		return
 	
 
 	if save:
