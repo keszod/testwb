@@ -551,7 +551,7 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[]):
 		text = urllib.parse.quote_plus(message)
 		
 		if not keyboard:
-			keyboard = [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['Аккаунт компании'],['Настройки']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отчёт по действиям конкурентов'],['Аккаунт компании'],['Настройки'],['/info'],['/post']]
+			keyboard = [['Отчёт о позициях товаров'],['Отслеживание цен и и наличия товаров'],['Аккаунт компании'],['Настройки']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отслеживание цен и и наличия товаров'],['Аккаунт компании'],['Настройки'],['/info'],['/post']]
 			keyboard = {'keyboard':keyboard,'resize_keyboard':False}
 		
 		url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+text+'&parse_mode=html&reply_markup='+json.dumps(keyboard)

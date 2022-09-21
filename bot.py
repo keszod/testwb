@@ -22,9 +22,9 @@ db = SQLighter(db_path)
 
 first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Начать'))
 shared_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
-start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании'))
+start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'))
 start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
-start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Добавить товар на отслеживание')).add(KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Список отслеживаемых магазинов')).add(KeyboardButton('Главное меню'))
+start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание')).add(KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
 
 edit_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
 edit_search_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить новый')).add(KeyboardButton('Назад'))
@@ -153,7 +153,7 @@ async def post(message):
 async def answer_message(message,text='',chat_id=''):
 	start_message = 'Выберите действие'
 	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1.Отслеживать движения товаров в поисковой выдаче WildBerries в разных городах. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n\n2.Следить за действиями ваших главных конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия"
-	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки'))
+	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки'))
 	
 	if chat_id == '':
 		chat_id = message.chat.id 
@@ -214,7 +214,7 @@ async def answer_message(message,text='',chat_id=''):
 
 	if str(chat_id) in admin_chats:
 		admin_rights = True
-		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отчёт по действиям конкурентов')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки')).add(KeyboardButton('/info')).add(KeyboardButton('/post'))
+		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки')).add(KeyboardButton('/info')).add(KeyboardButton('/post'))
 	
 	if text == 'Главное меню':
 		if status != 'main':
@@ -269,7 +269,7 @@ async def answer_message(message,text='',chat_id=''):
 			keyboard = start_buttons_goods
 			answer = 'После того как вы добавили товар, бот будет регулярно отчитываться о том как меняются его позиции\n\nОтчёт приходит после 10:00 по Мск с заданной периодичностью\n\nВы можете в любой момент изменить периодичность отчётов или запросить немедленное формирование отчёта'
 			db.update_status(chat_id,'goods_main')
-		elif text == 'Отчёт по действиям конкурентов':
+		elif text == 'Отслеживание цен и и наличия товаров':
 			keyboard = start_buttons_copetitor
 			answer = 'Бот предупредит вас когда конкурент сменит цену или его товар выпадет из наличия\n\n\nЭто важно, если ваш товар находится на первых местах в топе. Тогда действия конкурентов будут влиять на ваши продажи, а благодаря боту вы будете в курсе и быстро узнаете если ваш конкурент начнёт демпинговать или наоборот завысит цену, и сможете изменить свою цену, привлечь таким образом больше покупателей и продаж\n\n\nЭто же касается и моментов когда важный конкурент выпадает из наличия, в это время выгодно поднимать цены, ведь вам достанется больше покупателей\n\n\nТакже данный функционал можно использовать для отслеживания собственных цен. Чтобы убедиться в том что установлена правильная цена (помогает контролировать сотрудников и проверять себя), а также убедиться в том что скидка применилась и товар добавился в акцию'
 			db.update_status(chat_id,'competitor_main')
@@ -700,7 +700,7 @@ async def answer_message(message,text='',chat_id=''):
 							count += 1
 						answer += '\nВведите номер товара, который хотите удалить'
 
-			elif text == 'Список отслеживаемых магазинов':
+			elif text == 'Отслеживание всех товаров магазина':
 				db.update_status(chat_id,'competitor_shop_choice')
 				answer = 'У вас нет магазинов конкурентов'
 				print('products/products_shop '+str(chat_id))
@@ -731,13 +731,13 @@ async def answer_message(message,text='',chat_id=''):
 					save = True
 					save_name = '_shop'
 					twice_answer = True
-					twice_answer_text = 'Список отслеживаемых магазинов'
+					twice_answer_text = 'Отслеживание всех товаров магазина'
 					db.update_status(chat_id,'competitor_main')
 			
 			elif 'add' in status:
 				answer = add_competitor_shop(text,chat_id_products)
 				twice_answer = True
-				twice_answer_text = 'Список отслеживаемых магазинов'
+				twice_answer_text = 'Отслеживание всех товаров магазина'
 				db.update_status(chat_id,'competitor_main')
 
 		elif 'delete' in status:
