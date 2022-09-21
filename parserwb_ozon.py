@@ -221,7 +221,6 @@ def start_loop():
 					if os.path.exists('products/products_wb_competive '+user[1]+'.json'):
 						check_competitor_shop(user[1])
 						check_competitor(user[1])
-				break
 			except:
 				traceback.print_exc()
 
@@ -245,9 +244,10 @@ def start_loop():
 
 					db.update_user(days_max,days_past,user[1])
 				sended_message = True
-			if hour == '11':
+			elif hour == '11':
+				sleep(3)
 				break
-			
+
 			sleep(3)
 
 def check_if_product_in_fileselling(id_,exctra):
