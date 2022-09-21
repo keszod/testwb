@@ -245,10 +245,10 @@ def start_loop():
 					db.update_user(days_max,days_past,user[1])
 				sended_message = True
 			elif hour == '11':
-				sleep(3)
+				sleep(60)
 				break
 
-			sleep(3)
+			sleep(60)
 
 def check_if_product_in_fileselling(id_,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
