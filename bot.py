@@ -80,15 +80,18 @@ def get_info():
 	users_products = []
 	searches = []
 	products = []
+	shops_users = 0
 	admin_data = get_admin_data()
 
 	for filename in os.listdir("products"):
 		with open(os.path.join("products", filename), 'r',encoding='utf-8-sig') as f:
 			data = get_products(name=filename)
-			
-			if data == [] or data == {} or 'shop' in filename:
+			if data == [] or data == {}:
 				continue
 
+			if 'shop' in filename:
+				shops_users += 1
+				continue
 			if not filename.split()[1] in users:
 				users.append(filename.split()[1])
 
@@ -113,20 +116,24 @@ def get_info():
 				if not filename.split()[1] in users_products:
 					users_products.append(filename.split()[1])
 
-	strings = ['1. В боте зарегистрировано пользователей - ','2. Активных пользователей - ','3.Пользователей,которые имеют запросы на отслеживании - ','4.Пользователей,которые имеют товары на отслеживании - ','5. Всего товаров отслеживается - ','6. Всего товаров отслеживается - ']
-	data = [registred_users,users,users_search,users_products,searches,products]
+	strings = ['1. В боте зарегистрировано пользователей - ','2. Активных пользователей - ','3.Пользователей,которые имеют запросы на отслеживании - ','4.Пользователей,которые имеют товары на отслеживании - ','5. Всего запросов отслеживается - ','6. Всего товаров отслеживается - ','7. Людей отслежиают магазины - ']
+	data = [registred_users,users,users_search,users_products,searches,products,shops_users]
 	admin_keys = list(admin_data.keys())
 	info = ''
 	
 	for i in range(len(strings)):
-		diff = len(data[i]) - int(admin_data[admin_keys[i]])
+		if isinstance(data[i], list):
+			amount = len(data[i])
+		else:
+			amount = data[i]
+		diff = amount - int(admin_data[admin_keys[i]])
 		end = '🟢' if diff >= 0 else '🔴'
 		sybmol = '+' if int(diff) >= 0 else ''
 
 		end = f'({sybmol}{diff}) {end}'
 
-		info += strings[i]+str(len(data[i]))+end+'\n'
-		admin_data[admin_keys[i]] = len(data[i])
+		info += strings[i]+str(amount)+end+'\n'
+		admin_data[admin_keys[i]] = amount
 
 	save_admin_data(admin_data)
 	
@@ -152,7 +159,7 @@ async def post(message):
 @dp.message_handler(content_types=['text','document','photo'])
 async def answer_message(message,text='',chat_id=''):
 	start_message = 'Выберите действие'
-	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1.Отслеживать движения товаров в поисковой выдаче WildBerries в разных городах. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n\n2.Следить за действиями ваших главных конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия"
+	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1. Может взять ваш магазин на отслеживание и уведомлять когда цена товара изменилась, либо он выпал из наличия. Это застрахует вас от ошибок в выставлении цен и поможет контролировать правильность действий ваших сотрудников, а также поможет вовремя среагировать на неожиданное выпадение товара из наличия по какой-либо причине\n\n2. Поможет отслеживать движения ваших товаров в поисковой выдаче WildBerries. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n3. Покажет выдачу с различных регионов. Ваш товар может быть в топе, например, в Москве, но в Екатеринбурге в самом низу выдачи. Бот поможет вам выстроить вашу стратегию распределения товара по региональным складам\n\n4. Бот-помощник позволяет следить за действиями ваших конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия. Просто добавьте товар конкурента на отслеживание и мгновенно реагируйте на любые его действия, повышайте цену когда он выпадает из наличия и вовремя замечайте изменения среднерыночной цены на ваш товар"
 	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки'))
 	
 	if chat_id == '':
@@ -275,7 +282,7 @@ async def answer_message(message,text='',chat_id=''):
 			db.update_status(chat_id,'competitor_main')
 		elif text == 'Аккаунт компании':
 			keyboard = shared_keyboard
-			answer = 'Выберите действие'
+			answer = 'Вы можете добавить своего сотрудника в бот, чтобы вместе получать уведомления и работать с общим списком товаров. Для этого ваш сотрудник должен активировать бот, после чего вам нужно добавить его к своему аккаунту, указав ник в телеграм'
 			db.update_status(chat_id,'shared_main')
 		elif text == 'Настройки':
 			keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Доавить регион/регионы')).add(KeyboardButton('Удалить регион/регионы')).add(KeyboardButton('Главное меню'))
@@ -452,9 +459,20 @@ async def answer_message(message,text='',chat_id=''):
 				db.update_status(chat_id,'goods_add_product_url')
 				answer = 'Пришлите ссылку на товар'
 			elif text == 'Редактировать':
-				answer = 'Выберите маркет'
-				keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Ozon')).add(KeyboardButton('WildBerries')).add(KeyboardButton('Главное меню'))
-				db.update_status(chat_id,'change_market')
+				new_status = 'change_wb_goods_change_choose'
+				
+				if len(products) > 0:
+					keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
+					list_text = ''
+					for i in range(len(products)):
+						list_text += str(i+1)+') '+products[i]['name']+'\n\n' 
+					answer = f'Список товаров на отслеживание: \n\n{list_text}\n\n '+'Отправьте порядоквые номер товара,который нужно отредактировать'
+					db.update_status(chat_id,new_status)
+				else:
+					answer = f'Товары отсуствуют'
+					keyboard = start_buttons
+					db.update_status(chat_id,'start')
+			
 			elif text == 'Периодичность отчёта':
 				answer = 'Выберите, как часто бот должен присылать отчёт об изменении позиций ваших товаров: :\n\n1.Каждый день\n2.Каждые три дня\n3.Каждую неделю\n4.Каждый месяц\n\nПришлите номер нужного варианта'
 				db.update_status(chat_id,'period')
@@ -564,7 +582,13 @@ async def answer_message(message,text='',chat_id=''):
 
 		if 'wb' in status:
 			if 'choose' in status:
-				if not text.isnumeric() or int(text) > len(products):
+				if text == 'Удалить всё':
+					answer = 'Список очищен'
+					keyboard = start_buttons
+					db.update_status(chat_id,'start')
+					products = []
+					save = True
+				elif not text.isnumeric() or int(text) > len(products):
 					answer = 'Такой номер отсуствует'
 					keyboard = start_buttons
 					db.update_status(chat_id,'start')
@@ -693,6 +717,7 @@ async def answer_message(message,text='',chat_id=''):
 					products = get_products(chat_id_products,'_wb_competive')
 					
 					if products != {}:
+						keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
 						answer = ''
 						count = 1
 						for product in products:
@@ -710,6 +735,7 @@ async def answer_message(message,text='',chat_id=''):
 					products = get_products(chat_id_products,'_shop')
 					
 					if products != {}:
+						keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить магазин')).add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
 						answer = ''
 						count = 1
 						for product in products:
@@ -721,7 +747,12 @@ async def answer_message(message,text='',chat_id=''):
 			print('here--------------------')
 			if 'choice' in status:
 				products = get_products(chat_id_products,'_shop')
-				if text == 'Добавить магазин':
+				if text == 'Удалить всё':
+					answer = 'Список очищен'
+					products = {}
+					save = True
+					save_name = '_shop'
+				elif text == 'Добавить магазин':
 					answer = 'Введите ссылку на магазин,который хотите добавить'
 					db.update_status(chat_id,'competitor_shop_add')
 				elif text.isnumeric() and len(products) >= int(text)-1:
@@ -746,31 +777,36 @@ async def answer_message(message,text='',chat_id=''):
 				old_products = list(products.keys())
 				db.update_status(chat_id,'start')
 				keyboard = start_buttons
-		
-				for num in text.split(','):
-					num = num.strip()
-					if num.isnumeric():
-						if not int(num)-1 >= len(old_products):
-							count = 0
-							for product in old_products:
-								print(count)
-								if count == int(num)-1:
-									name = products[product]['name']
-									del products[product]
-									break
-								count += 1
-							answer_mess = f'Товар {name} успешно удалён и более не отслеживается'
-							save = True
-							save_name = '_wb_competive'
+				if text == 'Удалить всё':
+					products = {}
+					save = True
+					save_name = '_wb_competive'
+					answer = 'Список очищен'
+				else:
+					for num in text.split(','):
+						num = num.strip()
+						if num.isnumeric():
+							if not int(num)-1 >= len(old_products):
+								count = 0
+								for product in old_products:
+									print(count)
+									if count == int(num)-1:
+										name = products[product]['name']
+										del products[product]
+										break
+									count += 1
+								answer_mess = f'Товар {name} успешно удалён и более не отслеживается'
+								save = True
+								save_name = '_wb_competive'
 
+							else:
+								answer_mess = 'Такой товар отсуствует'
 						else:
-							answer_mess = 'Такой товар отсуствует'
-					else:
-						db.update_status(chat_id,'start')
-						answer_mess = 'Невозможный выбор'
-						keyboard = start_buttons
+							db.update_status(chat_id,'start')
+							answer_mess = 'Невозможный выбор'
+							keyboard = start_buttons
 
-					await message.answer(answer_mess)
+						await message.answer(answer_mess)
 
 		elif 'add' in status:
 			if 'url' in status:

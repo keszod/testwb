@@ -192,7 +192,6 @@ def load_cookie(cookie='москва'):
 
 def save_cookie(name='москва'):
 	driver.get('https://www.ozon.ru/')
-	input()
 	with open(name, 'wb') as filehandler:
 		pickle.dump(driver.get_cookies(), filehandler)
 
@@ -226,7 +225,7 @@ def start_loop():
 
 			hour,minute = datetime.now().strftime("%H:%M").split(':')
 			print(hour,'hour')
-			if hour == '10' and not sended_message:
+			if hour == '13' and not sended_message:
 				for user in users:		
 					days_max,days_past = user[-2:]
 				
@@ -295,17 +294,17 @@ def check_competitor_shop(chat_id):
 			for product in products:
 				keyboard = []
 				text = ''
-				ids.append(str(product['id']))
+				ids.append(str(str(product['id'])))
 
-				if not str(product['id']) in shops[sup_id]['products']:
+				if not str(str(product['id'])) in shops[sup_id]['products']:
 					text = 'Появился новый товар у '+shops[sup_id]['name']+'\n'+product['name']
 					price = {}
 					for region in regions:
 						price[region] = product['salePriceU']//100
 					
-					shops[sup_id]['products'][str(product['id'])] = {'name':product['name'],'price':price}
+					shops[sup_id]['products'][str(str(product['id']))] = {'name':product['name'],'price':price}
 				else:
-					shop_product = shops[sup_id]['products'][str(product['id'])]
+					shop_product = shops[sup_id]['products'][str(str(product['id']))]
 					name = shop_product['name']
 					price = product['salePriceU']//100
 
@@ -325,10 +324,12 @@ def check_competitor_shop(chat_id):
 
 					shop_product['price']['Москва'] = price
 
-					keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(product['id'])+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
+					keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(str(product['id']))+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
 					keyboard = {'inline_keyboard':[keyboard]}
+					
 					if text != '':
-						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
+						photo = 'https://basket-01.wb.ru/vol'+str(str(product['id'])[:len(str(product['id']))-5])+'/part'+str(str(product['id'])[:len(str(product['id']))-3])+'/'+str(str(product['id']))+'/images/c516x688/1.jpg'
+						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 			
 			for id_ in shops[sup_id]['products']:
 				if not id_ in ids:
@@ -337,6 +338,7 @@ def check_competitor_shop(chat_id):
 					if product['price']['Москва'] != None:
 						text = f'Товар {name}, больше не в продаже🔴'
 						product['price']['Москва'] = None
+						photo = 'https://basket-01.wb.ru/vol'+str(id_[:len(id_)-5])+'/part'+str(id_[:len(id_)-3])+'/'+str(id_)+'/images/c516x688/1.jpg'
 						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
 			page+=1
 
@@ -364,7 +366,7 @@ def check_competitor(chat_id):
 	for product in update_products:
 		try:
 			keyboard = []
-			product_in_file = products[str(product['id'])]
+			product_in_file = products[str(str(product['id']))]
 			price = str(product['salePriceU']//100)
 			name = product_in_file['name']
 			region = 'Москва'
@@ -394,11 +396,12 @@ def check_competitor(chat_id):
 					else:
 						text = f'Товар {name}, больше не в продаже🔴'
 
-				keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(product['id'])+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
+				keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(str(product['id']))+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
 				
 				product_in_file['price'][region] = price
 				keyboard = {'inline_keyboard':[keyboard]}
-				send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
+				photo = 'https://basket-01.wb.ru/vol'+str(str(product['id'])[:len(str(product['id']))-5])+'/part'+str(str(product['id'])[:len(str(product['id']))-3])+'/'+str(str(product['id']))+'/images/c516x688/1.jpg'
+				send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 		except:
 			traceback.print_exc()
 			continue
@@ -430,6 +433,7 @@ def start_parse(chat_id,solo=False):
 	user_regions = db.get_user(products_chat_id)[6].split(',')
 
 	for market in market_places:
+		count_of_product = 0
 		products = get_products(products_chat_id,'_'+market)
 		if len(products) == 0:
 			blank += 1
@@ -442,57 +446,66 @@ def start_parse(chat_id,solo=False):
 			warining_sent = True
 		
 		for product in products:
-			print(product)
-			name = product['name']
-			url = product['url']
-			if market == 'wb':
-				id_ = int(url.split('/')[4].split('/')[0])
-			
-			full_name = full_name_market[market]
-			text = f'<b>{full_name} -> {name}</b>:\n\n'
+			try:
+				count_of_product += 1
+				print(count_of_product,'____________________',len(products))
 
-			for region in regions:
-				if not region in user_regions:
-					continue
-
-				text += region+':\n\n'
+				name = product['name']
+				url = product['url']
 				if market == 'wb':
-					search = []
-					for reg_search in product['search']:
-						if not region in reg_search[1]:
-							reg_search[1][region] = None
+					id_ = int(url.split('/')[4].split('/')[0])
+				
+				full_name = full_name_market[market]
+				text = f'{count_of_product}.<b>{full_name} -> {name}</b>:\n\n'
 
-				if market == 'ozon' or check_if_product_in_fileselling(id_,regions[region]):
-					count = 0
-					if market == 'wb':		
-						for search in product['search']:
-							for i in range(3):
-								try:
-									count += 1
-									name_search = search[0].strip()
-									print(name_search)
-									answer_message = get_answer_message(market,url,name_search,search[1],region)
-									save_products(products,products_chat_id,'_wb')
-									break
-								except:
-									traceback.print_exc()
-									answer_message = name_search+' - произошла ошибка⚠️'
+				for region in regions:
+					if not region in user_regions:
+						continue
 
+					text += region+':\n\n'
+					if market == 'wb':
+						search = []
+						for reg_search in product['search']:
+							if not region in reg_search[1]:
+								reg_search[1][region] = None
+
+					if market == 'ozon' or check_if_product_in_fileselling(id_,regions[region]):
+						count = 0
+						if market == 'wb':		
+							for search in product['search']:
+								for i in range(3):
+									try:
+										count += 1
+										name_search = search[0].strip()
+										print(name_search)
+										answer_message = get_answer_message(market,url,name_search,search[1],region)
+										save_products(products,products_chat_id,'_wb')
+										break
+									except:
+										traceback.print_exc()
+										answer_message = name_search+' - произошла ошибка⚠️'
+
+								text += str(count)+'. '+answer_message+'\n'
+
+						elif market == 'ozon':
+							count += 1
+							answer_message = get_answer_message(market,url,product['name'],product['place'],region.lower())
+							save_products(products,products_chat_id,'_ozon')
 							text += str(count)+'. '+answer_message+'\n'
-
-					elif market == 'ozon':
-						count += 1
-						answer_message = get_answer_message(market,url,product['name'],product['place'],region.lower())
-						save_products(products,products_chat_id,'_ozon')
-						text += str(count)+'. '+answer_message+'\n'
-					text += '\n'
-				else:
-					text += f'-Нет в наличии\n\n'
-		
-			messages.append(text)
+						text += '\n'
+					else:
+						text += f'-Нет в наличии\n\n'
+			
+				messages.append(text)
+			except:
+				traceback.print_exc()
+				text += f'{count_of_product}. - {name} произошла ошибка⚠️,попробуйте удалить и снова добавить продукт\n\n'
+				messages.append(text)
 
 	j = 0
 	do_while = True
+	print('messages is ',len(messages))
+
 	while j != len(messages)-1 or do_while:
 	 	do_while = False
 	 	for i in range(len(messages)-1,-1,-1):
@@ -541,7 +554,7 @@ def get_answer_message(market,url,name,data,region):
 	return answer_message
 
 
-def send_message(message,chat_id,keyboard=None,extra_chat_ids=[]):
+def send_message(message,chat_id,keyboard=None,extra_chat_ids=[],photo=None):
 	extra_chat_ids = [chat_id]+extra_chat_ids
 
 	for chat_id in extra_chat_ids:
@@ -554,7 +567,10 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[]):
 			keyboard = [['Отчёт о позициях товаров'],['Отслеживание цен и и наличия товаров'],['Аккаунт компании'],['Настройки']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отслеживание цен и и наличия товаров'],['Аккаунт компании'],['Настройки'],['/info'],['/post']]
 			keyboard = {'keyboard':keyboard,'resize_keyboard':False}
 		
-		url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+text+'&parse_mode=html&reply_markup='+json.dumps(keyboard)
+		if photo:
+			url = telegram_api + 'sendPhoto?chat_id='+chat_id+'&photo='+photo+'&caption='+text+'&parse_mode=html&reply_markup='+json.dumps(keyboard)
+		else:
+			url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+text+'&parse_mode=html&reply_markup='+json.dumps(keyboard)
 		print(url)
 		requests.get(url)
 
@@ -664,12 +680,12 @@ def add_competitor_shop(url,chat_id):
 				break
 			
 			for product in products:
-				if not str(product['id']) in user_products:
+				if not str(str(product['id'])) in user_products:
 					price = {}
 					for region in regions:
 						price[region] = product['salePriceU']//100
 					
-					user_products[sup_id]['products'][str(product['id'])] = {'name':product['name'],'price':price}
+					user_products[sup_id]['products'][str(str(product['id']))] = {'name':product['name'],'price':price}
 			page+=1
 		
 		if len(user_products) > 0:
