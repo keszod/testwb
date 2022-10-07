@@ -209,45 +209,42 @@ def save_products(products,chat_id,name=''):
 
 def start_loop():
 	print('Петля запущена')
-	
-	while  True:
-		sended_message = False
-		while True:
-			try:
-				users = db.get_users()
+	sended_message = False
+	while True:
+		try:
+			users = db.get_users()
 
-				for user in users:
-					if os.path.exists('products/products_wb_competive '+user[1]+'.json'):
-						check_competitor_shop(user[1])
-						check_competitor(user[1])
-			except:
-				traceback.print_exc()
+			for user in users:
+				if os.path.exists('products/products_wb_competive '+user[1]+'.json'):
+					check_competitor_shop(user[1])
+					check_competitor(user[1])
+		except:
+			traceback.print_exc()
 
-			hour,minute = datetime.now().strftime("%H:%M").split(':')
-			print(hour,'hour')
-			if hour == '13' and not sended_message:
-				for user in users:		
-					days_max,days_past = user[-2:]
-				
-					if days_max == -1:
-						continue
+		hour,minute = datetime.now().strftime("%H:%M").split(':')
+		print(hour,'hour')
+		if hour == '10' and not sended_message:
+			for user in users:		
+				days_max,days_past = user[-2:]
+			
+				if days_max == -1:
+					continue
 
-					days_past += 1
+				days_past += 1
 
-					if days_past >= days_max:
-						try:
-							start_parse(user[1])
-						except:
-							traceback.print_exc()
-						days_past = 0
+				if days_past >= days_max:
+					try:
+						start_parse(user[1])
+					except:
+						traceback.print_exc()
+					days_past = 0
 
-					db.update_user(days_max,days_past,user[1])
-				sended_message = True
-			elif hour == '11':
-				sleep(60)
-				break
+				db.update_user(days_max,days_past,user[1])
+			sended_message = True
+		elif hour == '11':
+			sended_message = False
 
-			sleep(60)
+		sleep(60)
 
 def check_if_product_in_fileselling(id_,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
@@ -396,7 +393,7 @@ def check_competitor(chat_id):
 					else:
 						text = f'Товар {name}, больше не в продаже🔴'
 
-				keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(str(product['id']))+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
+				keyboard.append({'url':'https://www.wildberries.ru/catalog/'+str(product['id'])+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
 				
 				product_in_file['price'][region] = price
 				keyboard = {'inline_keyboard':[keyboard]}
