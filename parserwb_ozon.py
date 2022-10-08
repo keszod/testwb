@@ -361,7 +361,6 @@ def check_competitor_shop(chat_id):
 				if not id_ in ids:
 					print(id_)
 					print(ids)
-					input('--------')
 					product = shops[sup_id]['products'][id_]
 					name = product['name']
 					if product['price']['Москва'] != None:
