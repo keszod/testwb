@@ -220,31 +220,35 @@ def start_loop():
 					check_competitor(user[1])
 		except:
 			traceback.print_exc()
+		try:
+			hour,minute = datetime.now().strftime("%H:%M").split(':')
+			print(hour,'hour')
+			if hour == '10' and not sended_message:
+				for user in users:		
+					days_max,days_past = user[-2:]
+				
+					if days_max == -1:
+						continue
 
-		hour,minute = datetime.now().strftime("%H:%M").split(':')
-		print(hour,'hour')
-		if hour == '10' and not sended_message:
-			for user in users:		
-				days_max,days_past = user[-2:]
-			
-				if days_max == -1:
-					continue
+					days_past += 1
 
-				days_past += 1
+					if days_past >= days_max:
+						try:
+							start_parse(user[1])
+						except:
+							traceback.print_exc()
+						days_past = 0
 
-				if days_past >= days_max:
-					try:
-						start_parse(user[1])
-					except:
-						traceback.print_exc()
-					days_past = 0
+					db.update_user(days_max,days_past,user[1])
+				sended_message = True
+			elif hour == '11':
+				sended_message = False
 
-				db.update_user(days_max,days_past,user[1])
-			sended_message = True
-		elif hour == '11':
-			sended_message = False
-
-		sleep(60)
+			sleep(60)
+		except:
+			traceback.print_exc()
+			sleep(60)
+			continue
 
 def check_if_product_in_fileselling(id_,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
@@ -262,6 +266,30 @@ def check_competitor_products(ids,exctra):
 
 	return data['data']['products']
 
+def check_photo(id_):
+	count_photo = 0
+	is_photo = False
+	headers = get_headers('photo_headers')
+	while not is_photo:
+		photo = f'https://basket-0{count_photo}.wb.ru/vol'+str(id_[:len(id_)-5])+'/part'+str(id_[:len(str(id_))-3])+'/'+str(id_)+'/images/c516x688/1.jpg'
+		print(photo)
+		try:
+			r = requests.get(photo,headers=headers)
+			status = r.status_code
+		except:
+			traceback.print_exc()
+			status = 404
+		
+		if status != 404:
+			is_photo = True
+		
+		count_photo += 1
+		if count_photo == 10 and not is_photo:
+			photo = None
+			break
+	
+	return photo
+
 def check_competitor_shop(chat_id):
 	shared = db.get_shared(chat_id)
 	extra_chat_ids = []
@@ -278,12 +306,12 @@ def check_competitor_shop(chat_id):
 	shops = get_products(chat_id,'_shop')
 	old_shops = copy.deepcopy(shops)
 	for sup_id in shops:
+		ids = []
 		page = 1
 
 		while True:
 			search_url = 'https://catalog.wb.ru/sellers/catalog?appType=1&couponsGeo=12,3,18,15,21&curr=rub&dest=-1029256,-102269,-1252558,-1252424&emp=0&lang=ru&locale=ru&pricemarginCoeff=1.0&reg=0&regions=68,64,83,4,38,80,33,70,82,86,75,30,69,1,48,22,66,31,40,71&spp=0&supplier='+sup_id+'&page='+str(page)
 			products = get_page(search_url)['data']['products']
-			ids = []
 			
 			if len(products) == 0:
 				break
@@ -291,7 +319,7 @@ def check_competitor_shop(chat_id):
 			for product in products:
 				keyboard = []
 				text = ''
-				ids.append(str(str(product['id'])))
+				ids.append(str(product['id']))
 
 				if not str(str(product['id'])) in shops[sup_id]['products']:
 					text = 'Появился новый товар у '+shops[sup_id]['name']+'\n'+product['name']
@@ -325,17 +353,22 @@ def check_competitor_shop(chat_id):
 					keyboard = {'inline_keyboard':[keyboard]}
 					
 					if text != '':
-						photo = 'https://basket-01.wb.ru/vol'+str(str(product['id'])[:len(str(product['id']))-5])+'/part'+str(str(product['id'])[:len(str(product['id']))-3])+'/'+str(str(product['id']))+'/images/c516x688/1.jpg'
+						photo = check_photo(str(product['id']))
+
 						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 			
 			for id_ in shops[sup_id]['products']:
 				if not id_ in ids:
+					print(id_)
+					print(ids)
+					input('--------')
 					product = shops[sup_id]['products'][id_]
 					name = product['name']
 					if product['price']['Москва'] != None:
 						text = f'Товар {name}, больше не в продаже🔴'
 						product['price']['Москва'] = None
-						photo = 'https://basket-01.wb.ru/vol'+str(id_[:len(id_)-5])+'/part'+str(id_[:len(id_)-3])+'/'+str(id_)+'/images/c516x688/1.jpg'
+						photo = check_photo(str(id_))
+
 						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
 			page+=1
 
@@ -397,7 +430,9 @@ def check_competitor(chat_id):
 				
 				product_in_file['price'][region] = price
 				keyboard = {'inline_keyboard':[keyboard]}
-				photo = 'https://basket-01.wb.ru/vol'+str(str(product['id'])[:len(str(product['id']))-5])+'/part'+str(str(product['id'])[:len(str(product['id']))-3])+'/'+str(str(product['id']))+'/images/c516x688/1.jpg'
+				is_photo = False
+				count_photo = 0
+				photo = check_photo(str(product['id']))
 				send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 		except:
 			traceback.print_exc()
