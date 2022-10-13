@@ -610,11 +610,12 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[],photo=None):
 		if keyboard == True:
 			keyboard = [['Отчёт о позициях товаров','Отслеживание цен и и наличия товаров'],['Аккаунт компании','Настройки']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров','Отслеживание цен и и наличия товаров'],['Аккаунт компании','Настройки'],['/info','/post']]
 			keyboard = {'keyboard':keyboard,'resize_keyboard':False}
-			keyboard = json.dumps(keyboard)
 		elif keyboard == None:
 			keyboard = [['Ожидайте']]
 			keyboard = {'keyboard':keyboard,'resize_keyboard':True}
-			keyboard = json.dumps(keyboard)
+			
+		keyboard = json.dumps(keyboard)
+
 
 		if photo:
 			url = telegram_api + 'sendPhoto?chat_id='+chat_id+'&caption='+text+'&parse_mode=html&reply_markup='+keyboard
