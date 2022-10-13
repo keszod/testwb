@@ -17,6 +17,8 @@ from datetime import datetime, timedelta
 from aiogram import Bot, Dispatcher, executor, types
 from time import sleep
 
+from config import token
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, "db.db")
@@ -101,7 +103,7 @@ def get_page_driver(url,region):
 			
 			return json.loads(data)
 		except:
-			traceback.print_exc()
+			log_exc()
 			continue
 
 def get_category(id_):
@@ -207,6 +209,11 @@ def save_products(products,chat_id,name=''):
 	with open(f'products/products{name} {chat_id}.json','w',encoding='utf-8-sig') as file:
 		file.write(json.dumps(products))
 
+def log_exc():
+	traceback.print_exc()
+	with open('log.txt','a+') as file:
+		file.write(str(datetime.now())+'\n'+str(traceback.format_exc())+'\n\n\n')
+
 def start_loop():
 	print('Петля запущена')
 	sended_message = False
@@ -216,10 +223,11 @@ def start_loop():
 
 			for user in users:
 				if os.path.exists('products/products_wb_competive '+user[1]+'.json'):
-					check_competitor_shop(user[1])
 					check_competitor(user[1])
+				if os.path.exists('products/products_shop '+user[1]+'.json'):
+					check_competitor_shop(user[1])
 		except:
-			traceback.print_exc()
+			log_exc()
 		try:
 			hour,minute = datetime.now().strftime("%H:%M").split(':')
 			print(hour,'hour')
@@ -236,7 +244,7 @@ def start_loop():
 						try:
 							start_parse(user[1])
 						except:
-							traceback.print_exc()
+							log_exc()
 						days_past = 0
 
 					db.update_user(days_max,days_past,user[1])
@@ -246,7 +254,7 @@ def start_loop():
 
 			sleep(60)
 		except:
-			traceback.print_exc()
+			log_exc()
 			sleep(60)
 			continue
 
@@ -277,7 +285,6 @@ def check_photo(id_):
 			r = requests.get(photo,headers=headers)
 			status = r.status_code
 		except:
-			traceback.print_exc()
 			status = 404
 		
 		if status != 404:
@@ -288,7 +295,7 @@ def check_photo(id_):
 			photo = None
 			break
 	
-	return photo
+	return r.content
 
 def check_competitor_shop(chat_id):
 	shared = db.get_shared(chat_id)
@@ -367,8 +374,11 @@ def check_competitor_shop(chat_id):
 						text = f'Товар {name}, больше не в продаже🔴'
 						product['price']['Москва'] = None
 						photo = check_photo(str(id_))
+						keyboard = []
+						keyboard.append({'url':'https://www.wildberries.ru/catalog/'+id_+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
+						keyboard = {'inline_keyboard':[keyboard]}
 
-						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids)
+						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 			page+=1
 
 	if shops != old_shops:
@@ -434,14 +444,14 @@ def check_competitor(chat_id):
 				photo = check_photo(str(product['id']))
 				send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 		except:
-			traceback.print_exc()
+			log_exc()
 			continue
 
 	if products != old_products:
 		save_products(products,chat_id,'_wb_competive')
 
 #@dp.message_handler()
-def start_parse(chat_id,solo=False):
+def start_parse(chat_id,solo=False,warn=True):
 	warining_sent = False
 	market_places = ['wb']
 	full_name_market = {'wb':'WildBerries','ozon':'Ozon'}
@@ -451,6 +461,9 @@ def start_parse(chat_id,solo=False):
 	extra_chat_ids = []
 	shared = db.get_shared(chat_id)
 	messages = []
+
+	if warn:
+		send_message('Подготовка отчёта запущена, ожидайте',chat_id)
 
 	if shared and shared != '':
 		if 'shared' in shared:
@@ -487,7 +500,7 @@ def start_parse(chat_id,solo=False):
 					id_ = int(url.split('/')[4].split('/')[0])
 				
 				full_name = full_name_market[market]
-				text = f'{count_of_product}.<b>{full_name} -> {name}</b>:\n\n'
+				text = f'<b>{count_of_product}. {name}</b>:\n\n'
 
 				for region in regions:
 					if not region in user_regions:
@@ -513,7 +526,7 @@ def start_parse(chat_id,solo=False):
 										save_products(products,products_chat_id,'_wb')
 										break
 									except:
-										traceback.print_exc()
+										log_exc()
 										answer_message = name_search+' - произошла ошибка⚠️'
 
 								text += str(count)+'. '+answer_message+'\n'
@@ -529,7 +542,7 @@ def start_parse(chat_id,solo=False):
 			
 				messages.append(text)
 			except:
-				traceback.print_exc()
+				log_exc()
 				text += f'{count_of_product}. - {name} произошла ошибка⚠️,попробуйте удалить и снова добавить продукт\n\n'
 				messages.append(text)
 
@@ -542,11 +555,12 @@ def start_parse(chat_id,solo=False):
 	 	for i in range(len(messages)-1,-1,-1):
 	 		if len(''.join(messages[j:i+1])) <= 4000:
 	 			text = ''.join(messages[j:i+1])
+	 			print(text)
 	 			send_message(text,chat_id,extra_chat_ids=extra_chat_ids)
 	 			j = i
 	 			break
 	
-	send_message(f'Отчёт по позициям товаров за {now} закончен',chat_id,extra_chat_ids=extra_chat_ids)
+	send_message(f'Отчёт по позициям товаров за {now} закончен',chat_id,extra_chat_ids=extra_chat_ids,keyboard=True)
 
 def get_answer_message(market,url,name,data,region):
 	if market == 'wb':
@@ -555,7 +569,7 @@ def get_answer_message(market,url,name,data,region):
 		number = check_product_ozon(url,region=region)
 
 	if number is None:
-		answer_message = name+' - товар в выдаче, на 25+ странице🔴'
+		answer_message = '<i>'+name+'</i>'+' - товар в выдаче, на 25+ странице🔴'
 	elif 'реклама' in str(number):
 		num = str(number).split()[1]
 		if data[region] is None or not 'реклама' in data[region]:
@@ -565,20 +579,20 @@ def get_answer_message(market,url,name,data,region):
 			end = '🟢' if int(diff) >= 0 else '🔴'
 			diff = '+'+diff if int(diff) >= 0 else diff
 
-			answer_message = name+' - Товар рекламируется©,место '+str(number)+'('+diff+') '+end
+			answer_message = '<i>'+name+'</i>'+' - Товар рекламируется©,место '+str(number)+'('+diff+') '+end
 
 	elif 'нет' in str(number):
 		answer_message = '<del>'+name+'</del>'+' - товар отсутствует в выдаче 🔴'
 
 	else:
 		if not data[region] or not data[region].isnumeric():
-			answer_message = name+' - место '+str(number)+' 🟢'
+			answer_message = '<i>'+name+'</i>'+' - место '+str(number)+' 🟢'
 		else:
 			diff = str(int(data[region])-int(number))
 			end = '🟢' if int(diff) >= 0 else '🔴'
 			diff = '+'+diff if int(diff) >= 0 else diff
 
-			answer_message = name+' - место '+str(number)+'('+diff+') '+end
+			answer_message = '<i>'+name+'</i>'+' - место '+str(number)+'('+diff+') '+end
 
 	data[region] = str(number)
 
@@ -590,20 +604,27 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[],photo=None):
 
 	for chat_id in extra_chat_ids:
 		admin_chats = ['340549861','618939593']
-		telegram_api = 'https://api.telegram.org/bot5490688808:AAE9EVs8TSxndZt7FDAo7JyjwVIftI6DkH4/'
 		chat_id = chat_id
 		text = urllib.parse.quote_plus(message)
-		
-		if not keyboard:
-			keyboard = [['Отчёт о позициях товаров'],['Отслеживание цен и и наличия товаров'],['Аккаунт компании'],['Настройки']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров'],['Отслеживание цен и и наличия товаров'],['Аккаунт компании'],['Настройки'],['/info'],['/post']]
+		telegram_api = 'https://api.telegram.org/bot'+token+'/'
+		if keyboard == True:
+			keyboard = [['Отчёт о позициях товаров','Отслеживание цен и и наличия товаров'],['Аккаунт компании','Настройки']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров','Отслеживание цен и и наличия товаров'],['Аккаунт компании','Настройки'],['/info','/post']]
 			keyboard = {'keyboard':keyboard,'resize_keyboard':False}
-		
+			keyboard = json.dumps(keyboard)
+		elif keyboard == None:
+			keyboard = [['Ожидайте']]
+			keyboard = {'keyboard':keyboard,'resize_keyboard':True}
+			keyboard = json.dumps(keyboard)
+
 		if photo:
-			url = telegram_api + 'sendPhoto?chat_id='+chat_id+'&photo='+photo+'&caption='+text+'&parse_mode=html&reply_markup='+json.dumps(keyboard)
+			url = telegram_api + 'sendPhoto?chat_id='+chat_id+'&caption='+text+'&parse_mode=html&reply_markup='+keyboard
+			print(url)
+			requests.post(url,files={'photo':photo})
 		else:
-			url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+text+'&parse_mode=html&reply_markup='+json.dumps(keyboard)
-		print(url)
-		requests.get(url)
+			url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+text+'&parse_mode=html&reply_markup='+keyboard
+			print(url)
+			requests.get(url)
+
 
 def get_page(url,name='headers'):
 	headers = get_headers(name)
@@ -723,7 +744,7 @@ def add_competitor_shop(url,chat_id):
 			save_products(user_products,chat_id,'_shop')
 			return f'Магазин {name} успешно добавлен'
 	except:
-		traceback.print_exc()
+		log_exc()
 
 	return 'Магазин пуст или неправильный url'
 
@@ -735,4 +756,5 @@ if __name__ == '__main__':
 	#send_message('~Товар~','618939593')
 	#print(get_name('43475901'))
 	#check_competitor('618939593')
-	add_competitor_shop('https://www.wildberries.ru/seller/70619','618939593')
+	#add_competitor_shop('https://www.wildberries.ru/seller/70619','618939593')
+	check_competitor_shop('340549861')

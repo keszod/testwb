@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-from sql import SQLighter
+import traceback
 import requests
 import json
 import os
 import copy
+from sql import SQLighter
 from threading import Thread
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardRemove,ReplyKeyboardMarkup, KeyboardButton
 from time import sleep
-import traceback
+from config import token
 
 from parserwb_ozon import start_parse,start_loop,regions,add_competitor_shop
 
-bot = Bot(token='5490688808:AAE9EVs8TSxndZt7FDAo7JyjwVIftI6DkH4')
+bot = Bot(token=token)
 dp = Dispatcher(bot)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,9 +23,9 @@ db = SQLighter(db_path)
 
 first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Начать'))
 shared_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
-start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'))
+start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'))
 start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
-start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание')).add(KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
+start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание'),KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
 
 edit_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
 edit_search_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить новый')).add(KeyboardButton('Назад'))
@@ -160,7 +161,7 @@ async def post(message):
 async def answer_message(message,text='',chat_id=''):
 	start_message = 'Выберите действие'
 	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1. Может взять ваш магазин на отслеживание и уведомлять когда цена товара изменилась, либо он выпал из наличия. Это застрахует вас от ошибок в выставлении цен и поможет контролировать правильность действий ваших сотрудников, а также поможет вовремя среагировать на неожиданное выпадение товара из наличия по какой-либо причине\n\n2. Поможет отслеживать движения ваших товаров в поисковой выдаче WildBerries. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n3. Покажет выдачу с различных регионов. Ваш товар может быть в топе, например, в Москве, но в Екатеринбурге в самом низу выдачи. Бот поможет вам выстроить вашу стратегию распределения товара по региональным складам\n\n4. Бот-помощник позволяет следить за действиями ваших конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия. Просто добавьте товар конкурента на отслеживание и мгновенно реагируйте на любые его действия, повышайте цену когда он выпадает из наличия и вовремя замечайте изменения среднерыночной цены на ваш товар"
-	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки'))
+	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'),KeyboardButton('Настройки'))
 	
 	if chat_id == '':
 		chat_id = message.chat.id 
@@ -221,7 +222,7 @@ async def answer_message(message,text='',chat_id=''):
 
 	if str(chat_id) in admin_chats:
 		admin_rights = True
-		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров')).add(KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании')).add(KeyboardButton('Настройки')).add(KeyboardButton('/info')).add(KeyboardButton('/post'))
+		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'),KeyboardButton('Настройки')).add(KeyboardButton('/info'),KeyboardButton('/post'))
 	
 	if text == 'Главное меню':
 		if status != 'main':
@@ -451,7 +452,7 @@ async def answer_message(message,text='',chat_id=''):
 	elif 'goods' in status:
 		if 'main' in status:
 			if text == 'Получить отчёт':
-				answer = 'Подготовка отчёта'
+				answer = 'Подготовка отчёта запущена, ожидайте'
 				db.update_status(chat_id,'start')
 				keyboard = ReplyKeyboardMarkup()
 				parse = True
@@ -460,18 +461,14 @@ async def answer_message(message,text='',chat_id=''):
 				answer = 'Пришлите ссылку на товар'
 			elif text == 'Редактировать':
 				new_status = 'change_wb_goods_change_choose'
-				
-				if len(products) > 0:
-					keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
-					list_text = ''
-					for i in range(len(products)):
-						list_text += str(i+1)+') '+products[i]['name']+'\n\n' 
-					answer = f'Список товаров на отслеживание: \n\n{list_text}\n\n '+'Отправьте порядоквые номер товара,который нужно отредактировать'
-					db.update_status(chat_id,new_status)
-				else:
-					answer = f'Товары отсуствуют'
+				keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать ключевые слова')).add(KeyboardButton('Убрать товар из отслеживания')).add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
+				answer = 'Выберите действие'
+				if len(products) == 0:
+					answer = 'Товары отсуствуют'
 					keyboard = start_buttons
-					db.update_status(chat_id,'start')
+					new_status = 'start'
+				
+				db.update_status(chat_id,new_status)
 			
 			elif text == 'Периодичность отчёта':
 				answer = 'Выберите, как часто бот должен присылать отчёт об изменении позиций ваших товаров: :\n\n1.Каждый день\n2.Каждые три дня\n3.Каждую неделю\n4.Каждый месяц\n\nПришлите номер нужного варианта'
@@ -553,33 +550,6 @@ async def answer_message(message,text='',chat_id=''):
 				db.update_status(chat_id,'goods_main')
 	
 	elif 'change' in status:
-		if 'market' in status:
-			if text in markets:
-				if text == 'WildBerries':
-					need_to = 'Отправьте порядоквые номер товара,который нужно отредактировать'
-					new_status = 'change_wb_goods_change_choose'
-				elif text == 'Ozon':
-					save_name = '_ozon'
-					products = get_products(chat_id_products,save_name)
-					
-					need_to = 'Отправьте порядоквые номера товаров,которые нужно удалить, через запятую'
-					new_status = 'change_ozon_delete_choose'
-				
-				if len(products) > 0:
-					list_text = ''
-					for i in range(len(products)):
-						list_text += str(i+1)+') '+products[i]['name']+'\n\n' 
-					answer = f'Список товаров на отслеживание: \n\n{list_text}\n\n '+need_to
-					db.update_status(chat_id,new_status)
-				else:
-					answer = f'Товары отсуствуют'
-					keyboard = start_buttons
-					db.update_status(chat_id,'start')
-		else:
-			db.update_status(chat_id,'start')
-			answer = 'Такой маркет отсуствует'
-			keyboard = start_buttons
-
 		if 'wb' in status:
 			if 'choose' in status:
 				if text == 'Удалить всё':
@@ -588,47 +558,75 @@ async def answer_message(message,text='',chat_id=''):
 					db.update_status(chat_id,'start')
 					products = []
 					save = True
-				elif not text.isnumeric() or int(text) > len(products):
-					answer = 'Такой номер отсуствует'
-					keyboard = start_buttons
-					db.update_status(chat_id,'start')
-				else:	
-					db.update_status(chat_id,'wb_goods_change_product')
-					db.update_temp(chat_id,text)
-					name = products[int(text)-1]['name']
-					
-					answer = f'Что желаете сделать с {text} товаром,{name}'
-					keyboard = edit_keyboard
+
+				elif text in ['Редактировать ключевые слова','Убрать товар из отслеживания']:
+					if 'слова' in text:
+						end_word = 'отредактировать'
+						status_str = '_search'
+						suf = '()'
+					else:
+						end_word = 'удалить'
+						status_str = '_delete'
+						suf = '(а)'
+
+					new_status = 'wb_change_product_do'+status_str
+					list_text = ''
+
+					if len(products) > 0:
+						for i in range(len(products)):
+							list_text += str(i+1)+') '+products[i]['name']+'\n\n' 
+						answer = f'Список товаров на отслеживание: \n\n{list_text}\n\n '+f'Отправьте порядоквые номер{suf} товара,который нужно '+end_word
+						db.update_status(chat_id,new_status)
+					else:
+						answer = 'Товары отсуствуют'
+						db.update_status(chat_id,'start')
+						keyboard = start_buttons
+			
 			elif 'product' in status:
-				if text == 'Редактировать поисковые запросы':
-					db.update_status(chat_id,'wb_goods_change_search')
+				if 'do' in status:
+					print('here')
+					if 'search' in status:
+						if text.isnumeric() and int(text)-1 < len(products):
+							db.update_status(chat_id,'wb_goods_change_search')
 
-					temp = db.get_temp(chat_id)
-					num = int(temp)-1
-					name = products[num]['name']
-					search_list = ''
-					search = products[num]['search']
-					count = 1
+							#temp = db.get_temp(chat_id)
+							num = int(text)-1
+							db.update_temp(chat_id,text)
+							
+							name = products[num]['name']
+							search_list = ''
+							search = products[num]['search']
+							count = 1
+							
+							for i in range(len(search)):
+								search_list += str(i+1)+') '+search[i][0]+'\n'
+							
+							answer = f'Список запросов по которым отслеживается `{name}`:\n\n {search_list} \nОтправте порядковые номера запросов которые нужно удалить через запятую'
+							keyboard = edit_search_keyboard
+						else:
+							answer = 'Такой товар отсуствует'
+							db.update_status(chat_id,'wb_change_choose')
+							twice_answer = True
+							twice_answer_text = 'Редактировать ключевые слова'
 					
-					for i in range(len(search)):
-						search_list += str(i+1)+') '+search[i][0]+'\n'
-					
-					answer = f'Список запросов по которым отслеживается `{name}`:\n\n {search_list} \nОтправте порядковые номера запросов которые нужно удалить через запятую'
-					keyboard = edit_search_keyboard
-				elif text == 'Удалить товар':
-					db.update_status(chat_id,'change_market')
-					temp = db.get_temp(chat_id)
-					del products[int(temp)-1]
-					answer = f'Товар {temp} удалён'
-					save = True
-					twice_answer = True
-					twice_answer_text = 'WildBerries'
-
-				elif text == 'Назад':
-					answer = ''
-					db.update_status(chat_id,'change_market')
-					twice_answer = True
-					twice_answer_text = 'WildBerries'
+					elif 'delete' in status:
+						text = text.split(',')
+						old_products = copy.deepcopy(products)
+						answer = ''
+						
+						for el in text:
+							if el.isnumeric() and int(el)-1 < len(old_products):
+								num = int(el) - 1
+								index = products.index(old_products[num])
+								del products[index]
+								answer += f'Товар {el} удалён\n'
+							else:
+								answer += f'Товар {el} отсуствует\n'
+						
+						save = True
+						twice_answer = True
+						db.update_status(chat_id,'wb_change_choose')
+						twice_answer_text = 'Убрать товар из отслеживания'
 			
 			elif 'search' in status:
 				temp = db.get_temp(chat_id)
@@ -649,9 +647,9 @@ async def answer_message(message,text='',chat_id=''):
 
 				elif text == 'Назад':
 					answer = ''
-					db.update_status(chat_id,'change_market')
 					twice_answer = True
-					twice_answer_text = 'WildBerries'
+					db.update_status(chat_id,'wb_change_choose')
+					twice_answer_text = 'Редактировать ключевые слова'
 				else:
 					db.update_status(chat_id,'wb_goods_change_product')
 					keyboard = start_buttons
@@ -679,6 +677,7 @@ async def answer_message(message,text='',chat_id=''):
 					answer = 'Выберите действие'
 					twice_answer = True
 					twice_answer_text = 'Редактировать поисковые запросы'
+			
 
 		elif 'ozon' in status:
 			save_name = '_ozon'
@@ -860,7 +859,7 @@ async def answer_message(message,text='',chat_id=''):
 		await answer_message(message,twice_answer_text,twice_chat_id)
 
 	if parse:
-		start_parse(str(chat_id),True)
+		start_parse(str(chat_id),True,False)
 
 
 if __name__ == '__main__':
