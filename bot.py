@@ -631,15 +631,19 @@ async def answer_message(message,text='',chat_id=''):
 			elif 'search' in status:
 				temp = db.get_temp(chat_id)
 				if 'add' in status:
-					db.update_status(chat_id,'wb_goods_change_product')
 					answer = 'Запрос добавлен,ожидайте отчёт'
 					keyboard = start_buttons
 
-					products[int(temp)-1]['search'].append([text,None])
+					plases = {}
+					for region in regions:
+						plases[region] = None
+				
+					products[int(temp)-1]['search'].append([text,plases]) 
 					save = True
 
+					db.update_status(chat_id,'wb_change_choose')
 					twice_answer = True
-					twice_answer_text = 'Редактировать поисковые запросы'
+					twice_answer_text = 'Редактировать ключевые слова'
 				
 				elif text == 'Добавить новый':
 					db.update_status(chat_id,'wb_goods_change_search_add')
@@ -647,8 +651,8 @@ async def answer_message(message,text='',chat_id=''):
 
 				elif text == 'Назад':
 					answer = ''
-					twice_answer = True
 					db.update_status(chat_id,'wb_change_choose')
+					twice_answer = True
 					twice_answer_text = 'Редактировать ключевые слова'
 				else:
 					db.update_status(chat_id,'wb_goods_change_product')
@@ -675,8 +679,9 @@ async def answer_message(message,text='',chat_id=''):
 						await message.answer(answer_mess)
 
 					answer = 'Выберите действие'
+					db.update_status(chat_id,'wb_change_choose')
 					twice_answer = True
-					twice_answer_text = 'Редактировать поисковые запросы'
+					twice_answer_text = 'Редактировать ключевые слова'
 			
 
 		elif 'ozon' in status:
