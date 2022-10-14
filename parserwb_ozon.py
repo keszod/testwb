@@ -88,7 +88,7 @@ def create_driver(headless=True):
 	
 	return driver
 
-driver = create_driver()
+#driver = create_driver()
 
 def get_page_driver(url,region):
 	while True:
@@ -529,13 +529,13 @@ def start_parse(chat_id,solo=False,warn=True):
 										log_exc()
 										answer_message = name_search+' - произошла ошибка⚠️'
 
-								text += str(count)+'. '+answer_message+'\n'
+								text += answer_message+'\n'
 
 						elif market == 'ozon':
 							count += 1
 							answer_message = get_answer_message(market,url,product['name'],product['place'],region.lower())
 							save_products(products,products_chat_id,'_ozon')
-							text += str(count)+'. '+answer_message+'\n'
+							text += answer_message+'\n'
 						text += '\n'
 					else:
 						text += f'-Нет в наличии\n\n'

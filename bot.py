@@ -24,7 +24,7 @@ db = SQLighter(db_path)
 first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Начать'))
 shared_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
 start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'))
-start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
+start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Главное меню'))
 start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание'),KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
 
 edit_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
@@ -286,7 +286,7 @@ async def answer_message(message,text='',chat_id=''):
 			answer = 'Вы можете добавить своего сотрудника в бот, чтобы вместе получать уведомления и работать с общим списком товаров. Для этого ваш сотрудник должен активировать бот, после чего вам нужно добавить его к своему аккаунту, указав ник в телеграм'
 			db.update_status(chat_id,'shared_main')
 		elif text == 'Настройки':
-			keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Доавить регион/регионы')).add(KeyboardButton('Удалить регион/регионы')).add(KeyboardButton('Главное меню'))
+			keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Доавить регион/регионы'),KeyboardButton('Удалить регион/регионы')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
 			answer = 'Выберите действие'
 			db.update_status(chat_id,'settings choose')
 
@@ -405,6 +405,15 @@ async def answer_message(message,text='',chat_id=''):
 				answer += ','.join(user_regions)
 				db.update_status(chat_id,'settings region delete')
 
+			elif text == 'Удалить регион/регионы':
+				answer = "Введите регионы которые хотите удалить через запятую: \n\n"
+				answer += ','.join(user_regions)
+				db.update_status(chat_id,'settings region delete')
+
+			elif text == 'Периодичность отчёта':
+				answer = 'Выберите, как часто бот должен присылать отчёт об изменении позиций ваших товаров: :\n\n1.Каждый день\n2.Каждые три дня\n3.Каждую неделю\n4.Каждый месяц\n\nПришлите номер нужного варианта'
+				db.update_status(chat_id,'period')
+
 		elif 'region' in status:
 			if 'add' in status:
 				user_regions = db.get_user(chat_id)[6].split(',')
@@ -469,10 +478,6 @@ async def answer_message(message,text='',chat_id=''):
 					new_status = 'start'
 				
 				db.update_status(chat_id,new_status)
-			
-			elif text == 'Периодичность отчёта':
-				answer = 'Выберите, как часто бот должен присылать отчёт об изменении позиций ваших товаров: :\n\n1.Каждый день\n2.Каждые три дня\n3.Каждую неделю\n4.Каждый месяц\n\nПришлите номер нужного варианта'
-				db.update_status(chat_id,'period')
 
 	if 'add_product' in status:
 		if 'url' in status:
