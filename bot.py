@@ -25,7 +25,7 @@ first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Н�
 shared_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
 start_buttons = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'))
 start_buttons_goods = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Главное меню'))
-start_buttons_copetitor = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание'),KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
+start_buttons_copetitor = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание'),KeyboardButton('Список товаров на отслеживании')).add(KeyboardButton('Главное меню'))
 
 edit_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
 edit_search_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить новый')).add(KeyboardButton('Назад'))
@@ -718,7 +718,7 @@ async def answer_message(message,text='',chat_id=''):
 			if text == 'Добавить товар на отслеживание':
 				answer = 'Введите ссылку на товар для отслеживания'
 				db.update_status(chat_id,'competitor_add_url')
-			elif text == 'Список отслеживаемых товаров и их удаление':
+			elif text == 'Список товаров на отслеживании':
 				db.update_status(chat_id,'competitor_delete')
 				answer = 'У вас нет товаров конкурентов'
 				print('products/products_wb_competive '+str(chat_id))
