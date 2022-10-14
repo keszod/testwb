@@ -609,7 +609,7 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[],photo=None):
 		telegram_api = 'https://api.telegram.org/bot'+token+'/'
 		if keyboard == True:
 			keyboard = [['Отчёт о позициях товаров','Отслеживание цен и и наличия товаров'],['Аккаунт компании','Настройки']] if not str(chat_id) in admin_chats else [['Отчёт о позициях товаров','Отслеживание цен и и наличия товаров'],['Аккаунт компании','Настройки'],['/info','/post']]
-			keyboard = {'keyboard':keyboard,'resize_keyboard':False}
+			keyboard = {'keyboard':keyboard,'resize_keyboard':True}
 		elif keyboard == None:
 			keyboard = [['Ожидайте']]
 			keyboard = {'keyboard':keyboard,'resize_keyboard':True}

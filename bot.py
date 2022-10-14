@@ -22,12 +22,12 @@ db_path = os.path.join(BASE_DIR, "db.db")
 db = SQLighter(db_path)
 
 first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Начать'))
-shared_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
-start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'))
-start_buttons_goods = ReplyKeyboardMarkup().add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Главное меню'))
-start_buttons_copetitor = ReplyKeyboardMarkup().add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание'),KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
+shared_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
+start_buttons = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'))
+start_buttons_goods = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Главное меню'))
+start_buttons_copetitor = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание'),KeyboardButton('Список отслеживаемых товаров и их удаление')).add(KeyboardButton('Главное меню'))
 
-edit_keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
+edit_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
 edit_search_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить новый')).add(KeyboardButton('Назад'))
 
 admin_chats = ['340549861','618939593']
@@ -161,7 +161,7 @@ async def post(message):
 async def answer_message(message,text='',chat_id=''):
 	start_message = 'Выберите действие'
 	first_message = "Привет! Этот бот будет тебе очень полезен, вот что он умеет:\n\n\n1. Может взять ваш магазин на отслеживание и уведомлять когда цена товара изменилась, либо он выпал из наличия. Это застрахует вас от ошибок в выставлении цен и поможет контролировать правильность действий ваших сотрудников, а также поможет вовремя среагировать на неожиданное выпадение товара из наличия по какой-либо причине\n\n2. Поможет отслеживать движения ваших товаров в поисковой выдаче WildBerries. Полезно знать как растёт ваш товар при его продвижении и иметь возможность быстро среагировать, если позиции вашего товара начали падать. Бот также поможет в SEO оптимизации, благодаря ему вы будете знать появился ли товар в поиске по нужным вам запросам или неожиданно пропал из поиска\n\n3. Покажет выдачу с различных регионов. Ваш товар может быть в топе, например, в Москве, но в Екатеринбурге в самом низу выдачи. Бот поможет вам выстроить вашу стратегию распределения товара по региональным складам\n\n4. Бот-помощник позволяет следить за действиями ваших конкурентов, сообщая когда они меняют цену или их товар выпадает из наличия. Просто добавьте товар конкурента на отслеживание и мгновенно реагируйте на любые его действия, повышайте цену когда он выпадает из наличия и вовремя замечайте изменения среднерыночной цены на ваш товар"
-	start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'),KeyboardButton('Настройки'))
+	start_buttons = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'),KeyboardButton('Настройки'))
 	
 	if chat_id == '':
 		chat_id = message.chat.id 
@@ -222,7 +222,7 @@ async def answer_message(message,text='',chat_id=''):
 
 	if str(chat_id) in admin_chats:
 		admin_rights = True
-		start_buttons = ReplyKeyboardMarkup().add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'),KeyboardButton('Настройки')).add(KeyboardButton('/info'),KeyboardButton('/post'))
+		start_buttons = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'),KeyboardButton('Настройки')).add(KeyboardButton('/info'),KeyboardButton('/post'))
 	
 	if text == 'Главное меню':
 		if status != 'main':
@@ -258,7 +258,7 @@ async def answer_message(message,text='',chat_id=''):
 				os.remove('photo.png')
 			
 			db.update_temp(chat_id,text)
-			keyboard = ReplyKeyboardMarkup().add('Да').add('Главное меню')
+			keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add('Да').add('Главное меню')
 			await message.answer('Вы уверены,что хотите сделать рассыку этого сообщения?',reply_markup=keyboard)
 		else:
 			if text == 'Да':
@@ -286,7 +286,7 @@ async def answer_message(message,text='',chat_id=''):
 			answer = 'Вы можете добавить своего сотрудника в бот, чтобы вместе получать уведомления и работать с общим списком товаров. Для этого ваш сотрудник должен активировать бот, после чего вам нужно добавить его к своему аккаунту, указав ник в телеграм'
 			db.update_status(chat_id,'shared_main')
 		elif text == 'Настройки':
-			keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Доавить регион/регионы'),KeyboardButton('Удалить регион/регионы')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
+			keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Доавить регион/регионы'),KeyboardButton('Удалить регион/регионы')).add(KeyboardButton('Периодичность отчёта')).add(KeyboardButton('Главное меню'))
 			answer = 'Выберите действие'
 			db.update_status(chat_id,'settings choose')
 
@@ -463,14 +463,14 @@ async def answer_message(message,text='',chat_id=''):
 			if text == 'Получить отчёт':
 				answer = 'Подготовка отчёта запущена, ожидайте'
 				db.update_status(chat_id,'start')
-				keyboard = ReplyKeyboardMarkup()
+				keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 				parse = True
 			elif text == 'Добавить товар':
 				db.update_status(chat_id,'goods_add_product_url')
 				answer = 'Пришлите ссылку на товар'
 			elif text == 'Редактировать':
 				new_status = 'change_wb_goods_change_choose'
-				keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Редактировать ключевые слова')).add(KeyboardButton('Убрать товар из отслеживания')).add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
+				keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Редактировать ключевые слова'),KeyboardButton('Убрать товар из отслеживания')).add(KeyboardButton('Удалить всё'),KeyboardButton('Главное меню'))
 				answer = 'Выберите действие'
 				if len(products) == 0:
 					answer = 'Товары отсуствуют'
@@ -726,7 +726,7 @@ async def answer_message(message,text='',chat_id=''):
 					products = get_products(chat_id_products,'_wb_competive')
 					
 					if products != {}:
-						keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
+						keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
 						answer = ''
 						count = 1
 						for product in products:
@@ -738,13 +738,13 @@ async def answer_message(message,text='',chat_id=''):
 				db.update_status(chat_id,'competitor_shop_choice')
 				answer = 'У вас нет магазинов конкурентов'
 				print('products/products_shop '+str(chat_id))
-				keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить магазин')).add(KeyboardButton('Главное меню'))
+				keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить магазин')).add(KeyboardButton('Главное меню'))
 				
 				if os.path.exists('products/products_shop '+str(chat_id)+'.json'):
 					products = get_products(chat_id_products,'_shop')
 					
 					if products != {}:
-						keyboard = ReplyKeyboardMarkup().add(KeyboardButton('Добавить магазин')).add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
+						keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить магазин')).add(KeyboardButton('Удалить всё')).add(KeyboardButton('Главное меню'))
 						answer = ''
 						count = 1
 						for product in products:
