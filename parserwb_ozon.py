@@ -551,7 +551,7 @@ def start_parse(chat_id,solo=False,warn=True):
 	do_while = True
 	print('messages is ',len(messages))
 
-	while (len(messages) != 0) and (j != len(messages)-1 or do_while):
+	while (j != len(messages)-1 or do_while):
 	 	do_while = False
 	 	for i in range(len(messages)-1,-1,-1):
 	 		if len(''.join(messages[j:i+1])) <= 4000:
