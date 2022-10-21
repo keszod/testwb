@@ -228,10 +228,11 @@ def start_loop():
 					check_competitor_shop(user[1])
 		except:
 			log_exc()
+
 		try:
 			hour,minute = datetime.now().strftime("%H:%M").split(':')
 			print(hour,'hour')
-			if hour == '10' and not sended_message:
+			if hour == '12' and not sended_message:
 				for user in users:		
 					days_max,days_past = user[-2:]
 				
@@ -249,14 +250,13 @@ def start_loop():
 
 					db.update_user(days_max,days_past,user[1])
 				sended_message = True
-			elif hour == '11':
+			elif hour == '13':
 				sended_message = False
-
-			sleep(60)
 		except:
 			log_exc()
-			sleep(60)
 			continue
+
+		sleep(60)
 
 def check_if_product_in_fileselling(id_,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
@@ -319,13 +319,14 @@ def check_competitor_shop(chat_id):
 		while True:
 			search_url = 'https://catalog.wb.ru/sellers/catalog?appType=1&couponsGeo=12,3,18,15,21&curr=rub&dest=-1029256,-102269,-1252558,-1252424&emp=0&lang=ru&locale=ru&pricemarginCoeff=1.0&reg=0&regions=68,64,83,4,38,80,33,70,82,86,75,30,69,1,48,22,66,31,40,71&spp=0&supplier='+sup_id+'&page='+str(page)
 			products = get_page(search_url)['data']['products']
-			
+			print('|||||||||||||||||page is ',page)
 			if len(products) == 0:
 				break
 			
 			for product in products:
 				keyboard = []
 				text = ''
+				print(product['id'],product['name'])
 				ids.append(str(product['id']))
 
 				if not str(str(product['id'])) in shops[sup_id]['products']:
@@ -364,22 +365,22 @@ def check_competitor_shop(chat_id):
 
 						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 			
-			for id_ in shops[sup_id]['products']:
-				if not id_ in ids:
-					print(id_)
-					print(ids)
-					product = shops[sup_id]['products'][id_]
-					name = product['name']
-					if product['price']['Москва'] != None:
-						text = f'Товар {name}, больше не в продаже🔴'
-						product['price']['Москва'] = None
-						photo = check_photo(str(id_))
-						keyboard = []
-						keyboard.append({'url':'https://www.wildberries.ru/catalog/'+id_+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
-						keyboard = {'inline_keyboard':[keyboard]}
-
-						send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 			page+=1
+
+
+		for id_ in shops[sup_id]['products']:
+			if not str(id_) in str(ids):
+				product = shops[sup_id]['products'][id_]
+				name = product['name']
+				if product['price']['Москва'] != None:
+					text = f'Товар {name}, больше не в продаже🔴'
+					product['price']['Москва'] = None
+					photo = check_photo(str(id_))
+					keyboard = []
+					keyboard.append({'url':'https://www.wildberries.ru/catalog/'+id_+'/detail.aspx?targetUrl=XS','text':'Ссылка'})
+					keyboard = {'inline_keyboard':[keyboard]}
+
+					send_message(text,chat_id,keyboard=keyboard,extra_chat_ids=extra_chat_ids,photo=photo)
 
 	if shops != old_shops:
 		save_products(shops,chat_id,'_shop')
@@ -550,7 +551,7 @@ def start_parse(chat_id,solo=False,warn=True):
 	do_while = True
 	print('messages is ',len(messages))
 
-	while j != len(messages)-1 or do_while:
+	while (len(messages) != 0) and (j != len(messages)-1 or do_while):
 	 	do_while = False
 	 	for i in range(len(messages)-1,-1,-1):
 	 		if len(''.join(messages[j:i+1])) <= 4000:
