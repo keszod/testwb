@@ -93,7 +93,7 @@ def create_driver(headless=True):
 def get_page_driver(url,region):
 	while True:
 		try:
-			print(url)
+			#print(url)
 			driver.get(url)
 			sleep(0.1)
 			load_cookie(region)
@@ -232,7 +232,7 @@ def start_loop():
 		try:
 			hour,minute = datetime.now().strftime("%H:%M").split(':')
 			print(hour,'hour')
-			if hour == '12' and not sended_message:
+			if hour == '10' and not sended_message:
 				for user in users:		
 					days_max,days_past = user[-2:]
 				
@@ -250,7 +250,7 @@ def start_loop():
 
 					db.update_user(days_max,days_past,user[1])
 				sended_message = True
-			elif hour == '13':
+			elif hour == '11':
 				sended_message = False
 		except:
 			log_exc()
@@ -262,17 +262,20 @@ def check_if_product_in_fileselling(id_,exctra):
 	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
 	data = get_page(search_url)['data']['products'][0]
 
-	if 'wh' in data:
+	if data['sizes'][0]['stocks'] != []:
 		return True
 
 	return False
 
 
 def check_competitor_products(ids,exctra):
-	search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+';'.join(ids)
-	data = get_page(search_url)
+	products = []
+	for id_ in ids:
+		search_url = f'https://card.wb.ru/cards/detail?spp=0&{exctra}pricemarginCoeff=1.0&appType=1&nm='+str(id_)
+		data = get_page(search_url)
+		products += data['data']['products']
 
-	return data['data']['products']
+	return products
 
 def check_photo(id_):
 	count_photo = 0
@@ -280,7 +283,6 @@ def check_photo(id_):
 	headers = get_headers('photo_headers')
 	while not is_photo:
 		photo = f'https://basket-0{count_photo}.wb.ru/vol'+str(id_[:len(id_)-5])+'/part'+str(id_[:len(str(id_))-3])+'/'+str(id_)+'/images/c516x688/1.jpg'
-		print(photo)
 		try:
 			r = requests.get(photo,headers=headers)
 			status = r.status_code
@@ -306,7 +308,7 @@ def check_competitor_shop(chat_id):
 			return
 		else:
 			extra_chat_ids = shared.split()
-
+	print('test',shared,extra_chat_ids)
 	if not os.path.exists(f'products/products_shop {chat_id}.json'):
 		return
 	
@@ -319,14 +321,13 @@ def check_competitor_shop(chat_id):
 		while True:
 			search_url = 'https://catalog.wb.ru/sellers/catalog?appType=1&couponsGeo=12,3,18,15,21&curr=rub&dest=-1029256,-102269,-1252558,-1252424&emp=0&lang=ru&locale=ru&pricemarginCoeff=1.0&reg=0&regions=68,64,83,4,38,80,33,70,82,86,75,30,69,1,48,22,66,31,40,71&spp=0&supplier='+sup_id+'&page='+str(page)
 			products = get_page(search_url)['data']['products']
-			print('|||||||||||||||||page is ',page)
 			if len(products) == 0:
 				break
 			
 			for product in products:
 				keyboard = []
 				text = ''
-				print(product['id'],product['name'])
+				#print(product['id'],product['name'])
 				ids.append(str(product['id']))
 
 				if not str(str(product['id'])) in shops[sup_id]['products']:
@@ -411,7 +412,7 @@ def check_competitor(chat_id):
 			name = product_in_file['name']
 			region = 'Москва'
 			
-			if not 'wh' in product:
+			if product['sizes'][0]['stocks'] == []:
 				price = None
 
 			if product_in_file['price'][region] != price:
@@ -493,7 +494,7 @@ def start_parse(chat_id,solo=False,warn=True):
 		for product in products:
 			try:
 				count_of_product += 1
-				print(count_of_product,'____________________',len(products))
+				#print(count_of_product,'____________________',len(products))
 
 				name = product['name']
 				url = product['url']
@@ -522,7 +523,6 @@ def start_parse(chat_id,solo=False,warn=True):
 									try:
 										count += 1
 										name_search = search[0].strip()
-										print(name_search)
 										answer_message = get_answer_message(market,url,name_search,search[1],region)
 										save_products(products,products_chat_id,'_wb')
 										break
@@ -551,14 +551,14 @@ def start_parse(chat_id,solo=False,warn=True):
 	do_while = True
 	print('messages is ',len(messages))
 
-	while (len(messages) != 0) and (j != len(messages)-1 or do_while):
+	while (len(messages) != 0) and (j < len(messages)-1 or do_while):
 	 	do_while = False
+	 	print(i,j)
 	 	for i in range(len(messages)-1,-1,-1):
 	 		if len(''.join(messages[j:i+1])) <= 4000:
 	 			text = ''.join(messages[j:i+1])
-	 			print(text)
 	 			send_message(text,chat_id,extra_chat_ids=extra_chat_ids)
-	 			j = i
+	 			j = i+1
 	 			break
 	
 	send_message(f'Отчёт по позициям товаров за {now} закончен',chat_id,extra_chat_ids=extra_chat_ids,keyboard=True)
@@ -602,10 +602,9 @@ def get_answer_message(market,url,name,data,region):
 
 def send_message(message,chat_id,keyboard=None,extra_chat_ids=[],photo=None):
 	extra_chat_ids = [chat_id]+extra_chat_ids
-
+	print('test',extra_chat_ids)
 	for chat_id in extra_chat_ids:
 		admin_chats = ['340549861','618939593']
-		chat_id = chat_id
 		text = urllib.parse.quote_plus(message)
 		telegram_api = 'https://api.telegram.org/bot'+token+'/'
 		if keyboard == True:
@@ -614,24 +613,23 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[],photo=None):
 		elif keyboard == None:
 			keyboard = [['Ожидайте']]
 			keyboard = {'keyboard':keyboard,'resize_keyboard':True}
-			
-		keyboard = json.dumps(keyboard)
+		
+		if not isinstance(keyboard,str):
+			keyboard = json.dumps(keyboard)
 
 
 		if photo:
 			url = telegram_api + 'sendPhoto?chat_id='+chat_id+'&caption='+text+'&parse_mode=html&reply_markup='+keyboard
-			print(url)
 			requests.post(url,files={'photo':photo})
 		else:
 			url = telegram_api + 'sendMessage?chat_id='+chat_id+'&text='+text+'&parse_mode=html&reply_markup='+keyboard
-			print(url)
 			requests.get(url)
 
 
 def get_page(url,name='headers'):
 	headers = get_headers(name)
 	r = requests.get(url,headers=headers)
-	print(url)
+	#print(url)
 	test(r.text,'test.html')
 	json_ = json.loads(r.text)
 	
@@ -660,7 +658,6 @@ def check_adv(query,id_):
 		return None
 	
 	for adv in data:
-		print(int(adv['id']))
 		if int(adv['id']) == int(id_):
 			return number
 		number += 1
@@ -674,13 +671,11 @@ def get_name(id_):
 def check_product(query,id_,last_page=26,region='',extra_params=''):
 	number = 1
 	for page in range(1,last_page):
-		print('page is ',page)
 		search_url = f'https://search.wb.ru/exactmatch/ru/common/v4/search?appType=1&page={page}&pricemarginCoeff=1.0&query={query}&resultset=catalog&sort=popular&spp=0{region}'+extra_params
 		data = get_page(search_url)['data']
 
 		for product in data['products']:
 			if int(product['id']) == int(id_):
-				print(id_)
 				return str(number)
 
 			number += 1
@@ -701,16 +696,16 @@ def check_position(query,url,region):
 	id_ = int(url.split('/')[4].split('/')[0])
 	adv = check_adv(query,id_)
 	if  adv:
-		print('Товар найден среди рекламы')
+		#print('Товар найден среди рекламы')
 		return 'реклама '+str(adv)
 	
-	print('Товар не рекламный')
+	#print('Товар не рекламный')
 	
 	if not check_brand(query,id_,region):
 		print('Товар отсутствует')
 		return 'нет'
 
-	print('Товар найден в сортировки по бренду')
+	#print('Товар найден в сортировки по бренду')
 
 	return check_product(query,id_,region=region)
 

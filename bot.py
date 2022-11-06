@@ -173,13 +173,6 @@ async def answer_message(message,text='',chat_id=''):
 	files = ['_wb','_wb_competive','_ozon','_shop']
 	chat_id_products = chat_id
 
-	if db.get_shared(chat_id) and 'shared' in db.get_shared(chat_id):
-		chat_id_products =  db.get_shared(chat_id).split('_')[1]
-
-	twice_answer = False
-	twice_answer_text = ''
-
-
 	if not db.user_exists(str(chat_id)):
 		if message.from_user.username:
 			db.add_user(str(chat_id),message.from_user.username)
@@ -205,6 +198,12 @@ async def answer_message(message,text='',chat_id=''):
 			else:
 				if db.get_nick(chat_id) != message.from_user.first_name:
 					db.add_nick_name(chat_id,message.from_user.first_name)
+
+	if db.get_shared(chat_id) and 'shared' in db.get_shared(chat_id):
+		chat_id_products =  db.get_shared(chat_id).split('_')[1]
+
+	twice_answer = False
+	twice_answer_text = ''
 	
 	status = db.get_status(chat_id)
 	if text == '':
