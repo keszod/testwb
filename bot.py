@@ -24,7 +24,7 @@ db = SQLighter(db_path)
 first_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Начать'))
 shared_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Добавить пользователя')).add(KeyboardButton('Удалить пользователя')).add(KeyboardButton('Главное меню'))
 start_buttons = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отчёт о позициях товаров'),KeyboardButton('Отслеживание цен и и наличия товаров')).add(KeyboardButton('Аккаунт компании'))
-start_buttons_goods = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Получить отчёт')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Главное меню'))
+start_buttons_goods = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Получить отчёт'),KeyboardButton('Отчёт о товаре за месяц')).add(KeyboardButton('Редактировать'),KeyboardButton('Добавить товар')).add(KeyboardButton('Главное меню'))
 start_buttons_copetitor = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Отслеживание всех товаров магазина')).add(KeyboardButton('Добавить товар на отслеживание'),KeyboardButton('Список товаров на отслеживании')).add(KeyboardButton('Главное меню'))
 
 edit_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Редактировать поисковые запросы')).add(KeyboardButton('Удалить товар')).add(KeyboardButton('Назад'))
@@ -170,7 +170,7 @@ async def answer_message(message,text='',chat_id=''):
 		twice_chat_id = chat_id
 
 	markets = ['Ozon','WildBerries']
-	files = ['_wb','_wb_competive','_ozon','_shop']
+	files = ['_wb','_wb_competive','_ozon','_shop','_history']
 	chat_id_products = chat_id
 
 	if not db.user_exists(str(chat_id)):
@@ -188,7 +188,7 @@ async def answer_message(message,text='',chat_id=''):
 		for file in files:
 			print('products'+file+' '+str(chat_id)+'.json')
 			if not os.path.exists('products/products'+file+' '+str(chat_id)+'.json'):
-				blank = {} if ('competive' in file or 'shop' in file) else []
+				blank = {} if ('competive' in file or 'shop' in file or '_history' in file) else []
 				save_products(blank,chat_id,file)
 
 		if twice_chat_id == '':
@@ -464,9 +464,30 @@ async def answer_message(message,text='',chat_id=''):
 				db.update_status(chat_id,'start')
 				keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 				parse = True
+			elif text == 'Отчёт о товаре за месяц':
+				answer = 'Выберите товар'
+				new_status = 'goods_for_mounth'
+				list_text = ''
+				print(len(products))
+				if len(products) > 0:
+					for i in range(len(products)):
+						list_text += str(i+1)+') '+products[i]['name']+'\n\n' 
+						answer = f'Список товаров на отслеживание: \n\n{list_text}\n\n '+f'Отправьте порядоквые номер товара'
+						db.update_status(chat_id,new_status)
+				else:
+					answer = 'Товары отсуствуют'
+					db.update_status(chat_id,'start')
+					keyboard = start_buttons
+				
 			elif text == 'Добавить товар':
-				db.update_status(chat_id,'goods_add_product_url')
-				answer = 'Пришлите ссылку на товар'
+				if len(products) >= 30 and chat_id_products not in admin_chats:
+					db.update_status(chat_id,'start')
+					answer = 'Достигнут лимит в 30 товаров.'
+					keyboard = start_buttons
+				else:
+					db.update_status(chat_id,'goods_add_product_url')
+					answer = 'Пришлите ссылку на товар'
+			
 			elif text == 'Редактировать':
 				new_status = 'change_wb_goods_change_choose'
 				keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Редактировать ключевые слова'),KeyboardButton('Убрать товар из отслеживания')).add(KeyboardButton('Удалить всё'),KeyboardButton('Главное меню'))
@@ -477,7 +498,28 @@ async def answer_message(message,text='',chat_id=''):
 					new_status = 'start'
 				
 				db.update_status(chat_id,new_status)
+	if 'for_mounth' in status:
+		if text.isnumeric() and int(text) <= len(products) and int(text) > 0:
+			id_ = products[int(text)-1]['url'].split('/')[4].split('/')[0]
+			product_history = get_products(chat_id_products,'_history')
 
+			keyboard = start_buttons
+			db.update_status(chat_id,'start')
+
+			if id_ in product_history:
+				answer = 'Отчёт закончен.'
+
+				for history in product_history[id_]:
+					message_text = history[0]+'\n\n'+history[1]
+					print(history[0])
+					await bot.send_message(chat_id=chat_id, text=message_text, parse_mode='html')
+
+			else:
+				answer = 'У этого товара нет истории.'
+			
+		else:
+			answer = 'Неправильный номер товара.'
+			
 	if 'add_product' in status:
 		if 'url' in status:
 			try:
@@ -509,23 +551,6 @@ async def answer_message(message,text='',chat_id=''):
 				db.update_temp(chat_id,temp+';;;;;'+text)
 				db.update_status(chat_id,'goods_add_product_search')
 				answer = 'Введите запросы по которым данный товар будет отслеживаться , через запятую'
-			elif 'ozon' in temp:
-				save_name = '_ozon'
-				products = get_products(chat_id_products,save_name)
-				name = text
-				db.update_status(chat_id,'start')
-				answer = f'Товар "{name}" добавлен'
-				product = {'url':temp,'name':name,'place':{'москва':None,'казань':None}}
-				products.append(product)
-				keyboard = start_buttons
-			
-				save = True
-
-				if len(products) == 1:
-					print('here')
-					twice_answer = True
-					twice_answer_text = 'Периодичность отчёта'
-					db.update_status(chat_id,'goods_main')
 
 		elif 'search' in status:
 			db.update_status(chat_id,'start')

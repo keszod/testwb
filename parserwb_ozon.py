@@ -477,6 +477,7 @@ def start_parse(chat_id,solo=False,warn=True):
 			extra_chat_ids= shared.split()
 
 	user_regions = db.get_user(products_chat_id)[6].split(',')
+	product_history = get_products(products_chat_id,'_history')
 
 	for market in market_places:
 		count_of_product = 0
@@ -542,6 +543,13 @@ def start_parse(chat_id,solo=False,warn=True):
 						text += f'-Нет в наличии\n\n'
 			
 				messages.append(text)
+				
+				product_history = get_products(products_chat_id,'_history')
+				if not str(id_) in product_history:
+					product_history[str(id_)] = []
+
+				product_history[str(id_)].append([datetime.now().strftime("%m.%d.%Y"),text])
+				save_products(product_history,products_chat_id,'_history')
 			except:
 				log_exc()
 				text += f'{count_of_product}. - {name} произошла ошибка⚠️,попробуйте удалить и снова добавить продукт\n\n'
@@ -628,6 +636,7 @@ def send_message(message,chat_id,keyboard=None,extra_chat_ids=[],photo=None):
 
 def get_page(url,name='headers'):
 	headers = get_headers(name)
+	print(url)
 	r = requests.get(url,headers=headers)
 	#print(url)
 	test(r.text,'test.html')
@@ -672,7 +681,11 @@ def check_product(query,id_,last_page=26,region='',extra_params=''):
 	number = 1
 	for page in range(1,last_page):
 		search_url = f'https://search.wb.ru/exactmatch/ru/common/v4/search?appType=1&page={page}&pricemarginCoeff=1.0&query={query}&resultset=catalog&sort=popular&spp=0{region}'+extra_params
-		data = get_page(search_url)['data']
+		
+		try:
+			data = get_page(search_url)['data']
+		except KeyError:
+			return None
 
 		for product in data['products']:
 			if int(product['id']) == int(id_):
@@ -687,7 +700,12 @@ def check_product(query,id_,last_page=26,region='',extra_params=''):
 
 def check_brand(query,id_,region):
 	search_url = f'https://wbx-content-v2.wbstatic.net/ru/{id_}.json'
-	brand_id = get_page(search_url)['data']['brand_id']
+	data = get_page(search_url)['data']
+
+	if not 'brand_id' in data:
+		return True
+
+	brand_id = data['brand_id']
 	extra = f'&fbrand={brand_id}'
 
 	return check_product(query,id_,10000,region,extra)
