@@ -6221,3 +6221,1905 @@ TypeError: argument of type 'NoneType' is not iterable
 
 
 
+2022-12-19 22:35:30.715316
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 228, in start_loop
+    check_competitor_shop(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 323, in check_competitor_shop
+    products = get_page(search_url)['data']['products']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-19 23:58:10.996652
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 228, in start_loop
+    check_competitor_shop(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 323, in check_competitor_shop
+    products = get_page(search_url)['data']['products']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 05:32:56.197488
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 228, in start_loop
+    check_competitor_shop(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 323, in check_competitor_shop
+    products = get_page(search_url)['data']['products']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 08:56:33.435698
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:06:37.434333
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:08:07.690471
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:18:15.022886
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:25:13.806634
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:26:34.051609
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:29:35.315121
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:34:22.276558
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:39:57.209946
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:40:14.165962
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:42:43.165314
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 09:44:00.982018
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:01:36.944740
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:07:19.753106
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:12:11.168670
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:13:56.765981
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:16:21.518888
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:17:33.791025
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:24:22.787160
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:29:10.773430
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:33:26.580147
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:39:54.471243
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:40:01.041534
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:42:24.918183
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:43:07.529143
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:46:46.616779
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:49:42.034872
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:54:32.659840
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 10:58:27.260428
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 14:43:12.015557
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 14:46:36.225339
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 14:56:06.530044
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 14:57:37.010278
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:04:08.479921
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:05:01.772882
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:05:40.782774
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:10:50.361308
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:17:41.313595
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:17:42.906531
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:19:30.073060
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:23:40.736943
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:24:29.462681
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:24:39.071365
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:32:12.471028
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:32:16.038162
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 15:39:43.203491
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 17:25:36.775791
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 17:30:12.859262
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 17:39:06.680230
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 17:40:05.782547
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 17:51:55.745464
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 17:56:01.512685
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 17:56:19.698311
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 18:01:36.547458
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-20 23:46:51.999581
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 228, in start_loop
+    check_competitor_shop(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 323, in check_competitor_shop
+    products = get_page(search_url)['data']['products']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-21 10:08:09.297598
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-21 10:09:49.840795
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-21 10:17:31.672732
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 358831391.json'
+
+
+
+2022-12-21 10:17:31.858041
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 697951354.json'
+
+
+
+2022-12-21 10:17:32.046442
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 155477139.json'
+
+
+
+2022-12-21 10:17:32.242495
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 451802872.json'
+
+
+
+2022-12-21 10:17:32.430570
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 229664995.json'
+
+
+
+2022-12-21 10:17:32.623141
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 850178629.json'
+
+
+
+2022-12-21 10:17:32.820921
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 258454879.json'
+
+
+
+2022-12-21 10:17:33.030114
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 1189719770.json'
+
+
+
+2022-12-21 10:17:33.250286
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 858686781.json'
+
+
+
+2022-12-21 10:17:33.444979
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 356400016.json'
+
+
+
+2022-12-21 10:17:33.655031
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 296846972.json'
+
+
+
+2022-12-21 10:17:33.844988
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 397473311.json'
+
+
+
+2022-12-21 10:17:34.045458
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 334987843.json'
+
+
+
+2022-12-21 10:17:34.238369
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 419392186.json'
+
+
+
+2022-12-21 10:17:34.447046
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 460542630.json'
+
+
+
+2022-12-21 10:17:34.635328
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 1457462626.json'
+
+
+
+2022-12-21 10:17:34.829338
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 766746212.json'
+
+
+
+2022-12-21 10:17:35.065820
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 5491870063.json'
+
+
+
+2022-12-21 10:17:35.266746
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 822946913.json'
+
+
+
+2022-12-21 13:43:44.999825
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 228, in start_loop
+    check_competitor_shop(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 323, in check_competitor_shop
+    products = get_page(search_url)['data']['products']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-21 14:34:44.830230
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 228, in start_loop
+    check_competitor_shop(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 323, in check_competitor_shop
+    products = get_page(search_url)['data']['products']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-22 10:08:12.186068
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-22 10:08:51.585031
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-22 10:13:21.064603
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-22 10:17:39.481726
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 358831391.json'
+
+
+
+2022-12-22 10:17:39.681586
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 697951354.json'
+
+
+
+2022-12-22 10:17:39.915010
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 155477139.json'
+
+
+
+2022-12-22 10:17:40.150187
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 451802872.json'
+
+
+
+2022-12-22 10:17:40.359495
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 229664995.json'
+
+
+
+2022-12-22 10:17:40.610066
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 850178629.json'
+
+
+
+2022-12-22 10:17:40.808850
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 258454879.json'
+
+
+
+2022-12-22 10:17:41.002654
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 1189719770.json'
+
+
+
+2022-12-22 10:17:41.188074
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 858686781.json'
+
+
+
+2022-12-22 10:17:41.395829
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 356400016.json'
+
+
+
+2022-12-22 10:17:41.604155
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 296846972.json'
+
+
+
+2022-12-22 10:17:41.809730
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 397473311.json'
+
+
+
+2022-12-22 10:17:41.996775
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 334987843.json'
+
+
+
+2022-12-22 10:17:42.186965
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 419392186.json'
+
+
+
+2022-12-22 10:17:42.408894
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 460542630.json'
+
+
+
+2022-12-22 10:17:42.619427
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 1457462626.json'
+
+
+
+2022-12-22 10:17:42.935396
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 766746212.json'
+
+
+
+2022-12-22 10:17:43.211937
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 5491870063.json'
+
+
+
+2022-12-22 10:17:43.633879
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 246, in start_loop
+    start_parse(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 480, in start_parse
+    product_history = get_products(products_chat_id,'_history')
+  File "/root/testwb/parserwb_ozon.py", line 202, in get_products
+    with open(f'products/products{name} {chat_id}.json','r',encoding='utf-8-sig') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'products/products_history 822946913.json'
+
+
+
+2022-12-22 10:17:59.945443
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 527, in start_parse
+    answer_message = get_answer_message(market,url,name_search,search[1],region)
+  File "/root/testwb/parserwb_ozon.py", line 576, in get_answer_message
+    number = check_position(name,url,regions[region])
+  File "/root/testwb/parserwb_ozon.py", line 728, in check_position
+    return check_product(query,id_,region=region)
+  File "/root/testwb/parserwb_ozon.py", line 686, in check_product
+    data = get_page(search_url)['data']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
+2022-12-22 14:30:47.934897
+Traceback (most recent call last):
+  File "/root/testwb/parserwb_ozon.py", line 228, in start_loop
+    check_competitor_shop(user[1])
+  File "/root/testwb/parserwb_ozon.py", line 323, in check_competitor_shop
+    products = get_page(search_url)['data']['products']
+  File "/root/testwb/parserwb_ozon.py", line 643, in get_page
+    json_ = json.loads(r.text)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+
+
