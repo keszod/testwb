@@ -86,36 +86,40 @@ def get_info():
 
 	for filename in os.listdir("products"):
 		with open(os.path.join("products", filename), 'r',encoding='utf-8-sig') as f:
-			data = get_products(name=filename)
-			if data == [] or data == {}:
-				continue
+			try:
+				data = get_products(name=filename)
+				if data == [] or data == {}:
+					continue
 
-			if 'shop' in filename:
-				shops_users += 1
-				continue
-			if not filename.split()[1] in users:
-				users.append(filename.split()[1])
+				if 'shop' in filename:
+					shops_users += 1
+					continue
+				if not filename.split()[1] in users:
+					users.append(filename.split()[1])
 
-			print(filename)
-			if not '_competive' in filename:
-				print(data)
-				for product in data:
-					print(product)
-					if 'search' in product:
-						for search in product['search']:
-							if not search in searches:
-								searches.append(search)
-					else:
-						searches.append(product['url'])
-				
-				if not filename.split()[1] in users_search:
-					users_search.append(filename.split()[1])
-			else:
-				for product in data:
-					if not product in products:
-						products.append(product)
-				if not filename.split()[1] in users_products:
-					users_products.append(filename.split()[1])
+				print(filename)
+				if not '_competive' in filename:
+					print(data)
+					for product in data:
+						print(product)
+						if 'search' in product:
+							for search in product['search']:
+								if not search in searches:
+									searches.append(search)
+						else:
+							searches.append(product['url'])
+					
+					if not filename.split()[1] in users_search:
+						users_search.append(filename.split()[1])
+				else:
+					for product in data:
+						if not product in products:
+							products.append(product)
+					if not filename.split()[1] in users_products:
+						users_products.append(filename.split()[1])
+			except:
+				traceback.print_exc()
+				continue
 
 	strings = ['1. В боте зарегистрировано пользователей - ','2. Активных пользователей - ','3.Пользователей,которые имеют запросы на отслеживании - ','4.Пользователей,которые имеют товары на отслеживании - ','5. Всего запросов отслеживается - ','6. Всего товаров отслеживается - ','7. Людей отслежиают магазины - ']
 	data = [registred_users,users,users_search,users_products,searches,products,shops_users]
@@ -510,7 +514,7 @@ async def answer_message(message,text='',chat_id=''):
 				answer = 'Отчёт закончен.'
 
 				for history in product_history[id_]:
-					message_text = history[0]+'\n\n'+history[1]
+					message_text = '⏩'+'<b>'+history[0]+'</b>'+'\n\n'+history[1]
 					print(history[0])
 					await bot.send_message(chat_id=chat_id, text=message_text, parse_mode='html')
 

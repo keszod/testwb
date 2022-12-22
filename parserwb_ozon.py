@@ -548,7 +548,12 @@ def start_parse(chat_id,solo=False,warn=True):
 				if not str(id_) in product_history:
 					product_history[str(id_)] = []
 
-				product_history[str(id_)].append([datetime.now().strftime("%m.%d.%Y"),text])
+				elif product_history[str(id_)][-1][0] == datetime.now().strftime("%m.%d.%Y"):
+					product_history[str(id_)][-1] = [datetime.now().strftime("%m.%d.%Y"),text]
+				
+				else:
+					product_history[str(id_)].append([datetime.now().strftime("%m.%d.%Y"),text])
+				
 				save_products(product_history,products_chat_id,'_history')
 			except:
 				log_exc()
